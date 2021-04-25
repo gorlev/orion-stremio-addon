@@ -22,3 +22,8 @@ http://127.0.0.1:3634
 
 ### Remote
 Click on [https://orion-stremio-addon.herokuapp.com](https://orion-stremio-addon.herokuapp.com) and make your adjustments. Then, click install.
+
+## Contributions
+Great thanks to:
+* [tmdb-addon](https://github.com/mrcanelas/tmdb-addon)
+for the idea of preparing the configuration page. 
