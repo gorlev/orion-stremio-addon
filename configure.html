@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html style="background-image: url(https://orionoid.com/web/images/background/banner.jpg)">
+  <head>
+    <meta charset="utf-8" />
+    <title>Orion Stremio Addon</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 105%
+      }
+
+      html {
+        background-size: 120% auto;
+        background-position: center center;
+        background-repeat: no-repeat
+      }
+
+      body {
+        display: flex;
+        background: rgba(0, 0, 0, 0.60);
+        font-family: 'Open Sans', Arial, sans-serif;
+        color: white;
+      }
+
+      h1 {
+        font-size: 4.5vh;
+        font-weight: 700;
+      }
+
+      h2 {
+        font-size: 2.2vh;
+        font-weight: normal;
+        font-style: italic;
+        opacity: 0.8;
+      }
+
+      h3 {
+        font-size: 2.2vh;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+        text-shadow: 0 0 1vh rgba(0, 0, 0, 0.15);
+      }
+
+      p {
+        font-size: 1.75vh;
+      }
+
+      ul {
+        font-size: 1.75vh;
+        margin: 0;
+        margin-top: 1vh;
+        padding-left: 3vh;
+      }
+
+      a {
+        color: white
+      }
+
+      a.install-link {
+        text-decoration: none
+      }
+
+      button {
+        border: 0;
+        outline: 0;
+        color: white;
+        background: #8A5AAB;
+        padding: 1.2vh 3.5vh;
+        margin: auto;
+        text-align: center;
+        font-family: 'Open Sans', Arial, sans-serif;
+        font-size: 2.2vh;
+        font-weight: 600;
+        cursor: pointer;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+      }
+
+      button:hover {
+        box-shadow: none;
+      }
+
+      button:active {
+        box-shadow: 0 0 0 0.5vh white inset;
+      }
+
+      #addon {
+        width: 40vh;
+        margin: auto;
+      }
+
+      .logo {
+        height: 14vh;
+        width: 14vh;
+        margin: auto;
+        margin-bottom: 3vh;
+      }
+
+      .logo img {
+        width: 100%;
+      }
+
+      .name, .version {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .name {
+        line-height: 5vh;
+      }
+
+      .version {
+        position: absolute;
+        line-height: 5vh;
+        margin-left: 1vh;
+        opacity: 0.8;
+      }
+
+      .contact {
+        position: absolute;
+        left: 0;
+        bottom: 4vh;
+        width: 100%;
+        text-align: center;
+      }
+
+      .contact a {
+        font-size: 1.4vh;
+        font-style: italic;
+      }
+
+      .separator {
+        margin-bottom: 4vh;
+      }
+
+      #orionApi {
+        width: 40vh;
+        height: 5vh;
+        padding: 0.5vh 0.5vh;
+        margin: auto;
+        border: 0.5vh solid #8a5aab;
+        font-size: 2.2vh;
+        cursor: text;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+        color: #8a5aab;
+    }
+      #linkLimit {
+          width: 40vh;
+          height: 5vh;
+          padding: 0.5vh 0.5vh;
+          margin: auto;
+          border: 0.5vh solid #8a5aab;
+          font-size: 2.2vh;
+          cursor: auto;
+          display: block;
+          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+          transition: box-shadow 0.1s ease-in-out;
+          color: #8a5aab;
+      }
+      #min-vid-quality {
+          width: 40vh;
+          height: 5vh;
+          padding: 0.5vh 0.5vh;
+          margin: auto;
+          border: 0.5vh solid #8a5aab;
+          font-size: 2.2vh;
+          cursor: auto;
+          display: block;
+          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+          transition: box-shadow 0.1s ease-in-out;
+          color: #8a5aab;
+      }
+      #max-vid-quality {
+          width: 40vh;
+          height: 5vh;
+          padding: 0.5vh 0.5vh;
+          margin: auto;
+          border: 0.5vh solid #8a5aab;
+          font-size: 2.2vh;
+          cursor: auto;
+          display: block;
+          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+          transition: box-shadow 0.1s ease-in-out;
+          color: #8a5aab;
+      }
+      #sort-value {
+          width: 40vh;
+          height: 5vh;
+          padding: 0.5vh 0.5vh;
+          margin: auto;
+          border: 0.5vh solid #8a5aab;
+          font-size: 2.2vh;
+          cursor: auto;
+          display: block;
+          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+          transition: box-shadow 0.1s ease-in-out;
+          color: #8a5aab;
+      }
+      #min-audio-channels {
+          width: 40vh;
+          height: 5vh;
+          padding: 0.5vh 0.5vh;
+          margin: auto;
+          border: 0.5vh solid #8a5aab;
+          font-size: 2.2vh;
+          cursor: auto;
+          display: block;
+          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+          transition: box-shadow 0.1s ease-in-out;
+          color: #8a5aab;
+      }
+      /* Tooltip container */
+      .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+      }
+
+      /* Tooltip text */
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 240px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        border-radius: 16px;
+        top: -5px;
+        left: 105%;
+      
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+      }
+
+      /* Show the tooltip text when you mouse over the tooltip container */
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+      }
+
+    </style>
+    <link
+      rel="shortcut icon"
+      href="https://orionoid.com/web/images/logo/logo256.png"
+      type="image/x-icon"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  </head>
+
+  <body>
+    <div id="addon">
+      <div class="logo">
+        <img
+          src="https://orionoid.com/web/images/logo/logo256.png"
+        />
+      </div>
+      
+      <h1 class="name">Orion</h1>
+      <h2 class="version">1.0.0</h2>
+      <h2 class="description">Orion Stremio Addon. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
+
+      <div class="separator"></div>
+
+      <h3 class="gives">This addon has more :</h3>
+      <ul>
+        <li>Movies</li>
+        <li>Series</li>
+        <li>Others</li>
+      </ul>
+      
+      <div class="separator"></div>
+      
+      <h2 class="description">Orion API Key:</h2>
+      <input type="text" id="orionApi" name="orionApiKey" placeholder="Enter your Orion API key here" onchange="generateInstallLink()">
+
+      <div class="tooltip">
+        <span class="tooltiptext">The maximum number of streams to return. If not specified, all available links are returned. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.</span>
+        <h2 class="description">Link Limit per Search:</h2>
+        <input class="input" type="number" autocapitalize="off" id="linkLimit" placeholder="The maximum number of links to retrieve per scrape." value="5" onchange="generateInstallLink()" />  
+      </div>
+      
+      <h2 class="description">Sort Value:</h2>
+      <select id="sort-value" name="sort-value" onchange="generateInstallLink()">
+        <option value="none">No Sorting</option>
+        <option value="shuffle" >Random Shuffle</option>
+        <option value="best">Sort By Best (PREMIUM)</option>
+        <option value="popularity">Sort By User Popularity</option>
+        <option value="timeupdated">Sort By Update Time</option>
+        <option value="filesize">Sort By file Size</option>
+        <option value="streamseeds" selected>Sort By Torrent Seeds</option>
+        <option value="videoquality">Sort By Video Quality</option>
+        <option value="audiochannels">Sort By Audio Channels</option>
+      </select>
+
+
+      <h2 class="description">Minimum Video Quality:</h2>
+      <select id="min-vid-quality" name="minimum-video-quality" onchange="generateInstallLink()">
+        <option value="hd8k">HD8K</option>
+        <option value="hd6k">HD6K</option>
+        <option value="hd4k">HD4K</option>
+        <option value="hd2k">HD2K</option>
+        <option value="hd1080">HD1080</option>
+        <option value="hd720">HD720</option>
+        <option value="sd" selected>SD</option>
+        <option value="scr1080">SCR1080</option>
+        <option value="scr720">SCR720</option>
+        <option value="scr">SCR</option>
+        <option value="cam1080">CAM1080</option>
+        <option value="cam720">CAM720</option>
+        <option value="cam">CAM</option>
+      </select>
+
+      <h2 class="description">Maximum Video Quality:</h2>
+      <select id="max-vid-quality" name="maximum-video-quality" onchange="generateInstallLink()">
+        <option value="hd8k">HD8K</option>
+        <option value="hd6k">HD6K</option>
+        <option value="hd4k" selected>HD4K</option>
+        <option value="hd2k">HD2K</option>
+        <option value="hd1080">HD1080</option>
+        <option value="hd720">HD720</option>
+        <option value="sd">SD</option>
+        <option value="scr1080">SCR1080</option>
+        <option value="scr720">SCR720</option>
+        <option value="scr">SCR</option>
+        <option value="cam1080">CAM1080</option>
+        <option value="cam720">CAM720</option>
+        <option value="cam">CAM</option>
+      </select>
+
+      <h2 class="description">Minimum Audio Channels:</h2>
+      <select id="min-audio-channels" name="min-audio-channels" onchange="generateInstallLink()">
+        <option value="1">1 Channel (Mono)</option>
+        <option value="2" selected>2 Channels (Stereo)</option>
+        <option value="6" >6 Channels (5.1) (Surround)</option>
+        <option value="8">8 Channels (7.1) (Surround)</option>
+      </select>
+
+
+      <div class="separator"></div>
+      
+      <a id="installLink" class="install-link" href="#">
+        <button name="Install">INSTALL</button>
+      </a>
+    </div>
+
+    <script type="text/javascript">
+
+      function generateInstallLink() {
+
+        const apikey = $('#orionApi').val()
+        const linkLimit = $('#linkLimit').val()
+        const minQuality = $('#min-vid-quality').val()
+        const maxQuality = $('#max-vid-quality').val()
+        const sortValue = $('#sort-value').val()
+        const minAudio = $('#min-audio-channels').val()
+
+        const configuration = `${apikey}-${linkLimit}-${minQuality}-${maxQuality}-${sortValue}-${minAudio}` //apikey, linkLimit, minQuality, maxQuality, sortValue, minAudio 
+
+        if (apikey != '') {
+          installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
+        }
+      }
+    </script>
+  </body>
+</html>
