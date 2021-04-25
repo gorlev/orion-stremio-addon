@@ -25,5 +25,6 @@ Click on [https://orion-stremio-addon.herokuapp.com](https://orion-stremio-addon
 
 ## Contributions
 Great thanks to:
+* Orion Team for their great support.
 * [tmdb-addon](https://github.com/mrcanelas/tmdb-addon)
 for the idea of preparing the configuration page. 
