@@ -23,6 +23,14 @@ http://127.0.0.1:3634
 ### Remote
 Click on [https://orion-stremio-addon.herokuapp.com](https://orion-stremio-addon.herokuapp.com) and make your adjustments. Then, click install.
 
+## Todo
+Features I would like to implement and stuff needed to be done:
+- [x] Documentation
+- [x] Configuration page
+- [ ] More configuration options that Orion already supports
+- [ ] Debrid support with Orion's natively supported Debrid services (Real-Debrid, Premiumize.me, Offcloud)
+- [ ] Debrid support with other Debrid services
+
 ## Contributions
 Great thanks to:
 * Orion Team for their great support.
