@@ -361,8 +361,12 @@
         <button name="Install">INSTALL</button>
       </a>
     </div>
-
     <script type="text/javascript">
+
+      function encode(userData) {
+              // Encode to Base64, make URL-safe, remove padding (leading to Base64URL as described in RFC 4648).
+              return btoa(JSON.stringify(userData))
+      }
 
       function generateInstallLink() {
 
@@ -373,7 +377,12 @@
         const sortValue = $('#sort-value').val()
         const minAudio = $('#min-audio-channels').val()
 
-        const configuration = `${apikey}-${linkLimit}-${minQuality}-${maxQuality}-${sortValue}-${minAudio}` //apikey, linkLimit, minQuality, maxQuality, sortValue, minAudio 
+        //const configuration = `${apikey}-${linkLimit}-${minQuality}-${maxQuality}-${sortValue}-${minAudio}` //apikey, linkLimit, minQuality, maxQuality, sortValue, minAudio 
+        const conf = {
+          api: apikey, linkLimit: linkLimit, minQuality:minQuality, maxQuality:maxQuality, sortValue:sortValue, minAudio:minAudio
+        }
+
+        const configuration = encode(conf);
 
         if (apikey != '') {
           installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
