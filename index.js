@@ -13,7 +13,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.0.0",
+  version: "1.1.0",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -49,7 +49,6 @@ addon.get('/:userConf/manifest.json', async function (req, res) {
   }
 });
 
-
 const nrOfDays = (nr) => nr * (24 * 3600);
 
 addon.get('/:userConf/stream/:type/:id.json', async function (req, res, next) {
@@ -66,7 +65,6 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res, next) {
   respond(res, { streams: stream,  cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
-
 if (module.parent) {
   module.exports = addon;
 } else {
@@ -74,4 +72,3 @@ if (module.parent) {
     console.log(`Add-on Repository URL: http://127.0.0.1:3634/manifest.json`);
   });
 }
-

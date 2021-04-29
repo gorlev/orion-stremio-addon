@@ -12,14 +12,16 @@
       html {
         margin: 0;
         padding: 0;
-        width: 100%;
-        height: 105%
+        /* width: 100%;
+        height: 122%; */
+        position: center center;
       }
 
       html {
-        background-size: 120% auto;
+        background-size: 100% auto;
         background-position: center center;
-        background-repeat: no-repeat
+        background-repeat: no-repeat;
+        background-attachment: fixed;
       }
 
       body {
@@ -172,7 +174,7 @@
           transition: box-shadow 0.1s ease-in-out;
           color: #8a5aab;
       }
-      #min-vid-quality {
+      /* #min-vid-quality {
           width: 40vh;
           height: 5vh;
           padding: 0.5vh 0.5vh;
@@ -197,7 +199,7 @@
           box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
           transition: box-shadow 0.1s ease-in-out;
           color: #8a5aab;
-      }
+      } */
       #sort-value {
           width: 40vh;
           height: 5vh;
@@ -211,7 +213,7 @@
           transition: box-shadow 0.1s ease-in-out;
           color: #8a5aab;
       }
-      #min-audio-channels {
+      /* #min-audio-channels {
           width: 40vh;
           height: 5vh;
           padding: 0.5vh 0.5vh;
@@ -223,7 +225,7 @@
           box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
           transition: box-shadow 0.1s ease-in-out;
           color: #8a5aab;
-      }
+      } */
       /* Tooltip container */
       .tooltip {
         position: relative;
@@ -252,7 +254,101 @@
       .tooltip:hover .tooltiptext {
         visibility: visible;
       }
+      /*------------------------------------------------------------------------*/
+      .multiselect {
+        width: 200px;
+        background-color: #fff;
+      }
 
+      .selectBox {
+        position: relative;
+        background-color: #fff;
+      }
+
+      .selectBox select {
+        /* width: 100%;
+        font-weight: bold; */
+        width: 40vh;
+        height: 5vh;
+        padding: 0.5vh 0.5vh;
+        margin: auto;
+        border: 0.5vh solid #8a5aab;
+        font-size: 2.2vh;
+        cursor: auto;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+        color: #8a5aab;
+      }
+
+      .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      #checkboxesAudio {
+        display: none;
+        border: 1px #dadada solid;
+        /* width: 40vh;
+        height: 5vh;
+        padding: 0.5vh 0.5vh;
+        margin: auto;
+        border: 0.5vh solid #8a5aab;
+        font-size: 2.2vh;
+        cursor: auto;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+        color: #8a5aab; */
+      }
+
+      #checkboxesAudio label {
+        /* display: block; */
+        width: 40vh;
+        height: 5vh;
+        padding: 0.5vh 0.5vh;
+        margin: auto;
+        border: 0.5vh solid #8a5aab;
+        font-size: 2.2vh;
+        cursor: auto;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+        color: #8a5aab;
+        background-color: #fff;
+      }
+
+      #checkboxesAudio label:hover {
+        background-color: #fff;
+      }
+
+      #checkboxesVideo {
+        display: none;
+        border: 1px #dadada solid;
+      }
+
+      #checkboxesVideo label {
+        /* display: block; */
+        width: 40vh;
+        height: 5vh;
+        padding: 0.5vh 0.5vh;
+        margin: auto;
+        border: 0.5vh solid #8a5aab;
+        font-size: 2.2vh;
+        cursor: auto;
+        display: block;
+        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.1s ease-in-out;
+        color: #8a5aab;
+        background-color: #fff;
+      }
+
+      #checkboxesVideo label:hover {
+        background-color: #fff;
+      }
     </style>
     <link
       rel="shortcut icon"
@@ -275,7 +371,7 @@
       </div>
       
       <h1 class="name">Orion</h1>
-      <h2 class="version">1.0.0</h2>
+      <h2 class="version">1.1.0</h2>
       <h2 class="description">Orion Stremio Addon. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
 
       <div class="separator"></div>
@@ -311,49 +407,53 @@
         <option value="audiochannels">Sort By Audio Channels</option>
       </select>
 
+      <h2 class="description">Video Quality:</h2>
+      <form>
+        <div class="multiselect">
+          <div class="selectBox" id="selectBox" onclick="showCheckboxesVideo()">
+            <select>
+              <option>Select Video Quality</option>
+            </select>
+            <div class="overSelect"></div>
+          </div>
+          <div id="checkboxesVideo" name="videoquality" onchange="generateInstallLink()">
+              <label>
+                <input type="checkbox" name="vquality" value="hd8k" />8K (HD) <input type="checkbox" name="vquality" value="scr1080"/>1080p (SCR) </label>
+              <label>
+                <input type="checkbox"  name="vquality" value="hd6k"/>6K (HD) <input type="checkbox" name="vquality" value="scr720"/>720p (SCR) </label>
+              <label>
+                <input type="checkbox"  name="vquality" value="hd4k" checked/>4K (HD) <input type="checkbox" name="vquality" value="scr"/>SCR </label>
+                <label>
+                  <input type="checkbox" name="vquality" value="hd2k" checked/>2K (HD) <input type="checkbox" name="vquality" value="cam1080"/>1080p (CAM)</label>
+              <label>
+                <input type="checkbox" name="vquality" value="hd1080"checked/>1080p (HD) <input type="checkbox" name="vquality" value="cam720"/>720p (CAM)</label>
+                <label>
+                  <input type="checkbox" name="vquality" value="hd720"checked/>720p (HD) <input type="checkbox" name="vquality" value="sd"/> SD <input type="checkbox" name="vquality" value="cam"/>CAM</label>
+          </div>
+        </div>
+      </form>
 
-      <h2 class="description">Minimum Video Quality:</h2>
-      <select id="min-vid-quality" name="minimum-video-quality" onchange="generateInstallLink()">
-        <option value="hd8k">HD8K</option>
-        <option value="hd6k">HD6K</option>
-        <option value="hd4k">HD4K</option>
-        <option value="hd2k">HD2K</option>
-        <option value="hd1080">HD1080</option>
-        <option value="hd720">HD720</option>
-        <option value="sd" selected>SD</option>
-        <option value="scr1080">SCR1080</option>
-        <option value="scr720">SCR720</option>
-        <option value="scr">SCR</option>
-        <option value="cam1080">CAM1080</option>
-        <option value="cam720">CAM720</option>
-        <option value="cam">CAM</option>
-      </select>
-
-      <h2 class="description">Maximum Video Quality:</h2>
-      <select id="max-vid-quality" name="maximum-video-quality" onchange="generateInstallLink()">
-        <option value="hd8k">HD8K</option>
-        <option value="hd6k">HD6K</option>
-        <option value="hd4k" selected>HD4K</option>
-        <option value="hd2k">HD2K</option>
-        <option value="hd1080">HD1080</option>
-        <option value="hd720">HD720</option>
-        <option value="sd">SD</option>
-        <option value="scr1080">SCR1080</option>
-        <option value="scr720">SCR720</option>
-        <option value="scr">SCR</option>
-        <option value="cam1080">CAM1080</option>
-        <option value="cam720">CAM720</option>
-        <option value="cam">CAM</option>
-      </select>
-
-      <h2 class="description">Minimum Audio Channels:</h2>
-      <select id="min-audio-channels" name="min-audio-channels" onchange="generateInstallLink()">
-        <option value="1">1 Channel (Mono)</option>
-        <option value="2" selected>2 Channels (Stereo)</option>
-        <option value="6" >6 Channels (5.1) (Surround)</option>
-        <option value="8">8 Channels (7.1) (Surround)</option>
-      </select>
-
+      <h2 class="description">Audio Channels:</h2>
+      <form>
+        <div class="multiselect">
+          <div class="selectBox" id="selectBox" onclick="showCheckboxesAudio()">
+            <select>
+              <option>Select Audio Channels</option>
+            </select>
+            <div class="overSelect"></div>
+          </div>
+          <div id="checkboxesAudio" name="audiochannels" onchange="generateInstallLink()">
+            <label>
+              <input type="checkbox" name="achannel" value="1"/>1 Channel (Mono)</label>
+            <label>
+              <input type="checkbox" name="achannel" value="2" checked/>2 Channels (Stereo</label>
+            <label>
+              <input type="checkbox" name="achannel" value="6" checked/>6 Channels (5.1) (Surround)</label>
+            <label>
+              <input type="checkbox" name="achannel" value="8" checked/>8 Channels (7.1) (Surround)</label>
+          </div>
+        </div>
+      </form>
 
       <div class="separator"></div>
       
@@ -361,31 +461,76 @@
         <button name="Install">INSTALL</button>
       </a>
     </div>
+
     <script type="text/javascript">
 
+      var expanded = false;
+
+      function showCheckboxesAudio() {
+        var checkboxes = document.getElementById("checkboxesAudio");
+        if (!expanded) {
+          checkboxes.style.display = "block";
+          expanded = true;
+        } else {
+          checkboxes.style.display = "none";
+          expanded = false;
+        }
+      }
+
+      function showCheckboxesVideo() {
+        var checkboxes = document.getElementById("checkboxesVideo");
+        if (!expanded) {
+          checkboxes.style.display = "block";
+          expanded = true;
+        } else {
+          checkboxes.style.display = "none";
+          expanded = false;
+        }
+      }
+
+      function getAudioCheckBoxElements() {
+        let audiochannels = []
+        var markedCheckbox = document.getElementsByName('achannel')
+        for (var checkbox of markedCheckbox) {  
+          if (checkbox.checked)  
+            audiochannels.push(checkbox.value);         }  
+        return audiochannels
+      }
+
+      function getVideoCheckBoxElements() {
+        let videoquality = []  
+        var markedCheckbox = document.getElementsByName('vquality');
+          for (var checkbox of markedCheckbox) {  
+            if (checkbox.checked)  
+              videoquality.push(checkbox.value); 
+          }
+          return videoquality  
+      }
+
       function encode(userData) {
-              // Encode to Base64, make URL-safe, remove padding (leading to Base64URL as described in RFC 4648).
-              return btoa(JSON.stringify(userData))
+        // Encode to Base64, make URL safe
+        return btoa(JSON.stringify(userData))
       }
 
       function generateInstallLink() {
 
         const apikey = $('#orionApi').val()
         const linkLimit = $('#linkLimit').val()
-        const minQuality = $('#min-vid-quality').val()
-        const maxQuality = $('#max-vid-quality').val()
         const sortValue = $('#sort-value').val()
-        const minAudio = $('#min-audio-channels').val()
 
-        //const configuration = `${apikey}-${linkLimit}-${minQuality}-${maxQuality}-${sortValue}-${minAudio}` //apikey, linkLimit, minQuality, maxQuality, sortValue, minAudio 
-        const conf = {
-          api: apikey, linkLimit: linkLimit, minQuality:minQuality, maxQuality:maxQuality, sortValue:sortValue, minAudio:minAudio
+        let audiochannels = getAudioCheckBoxElements(document.getElementsByName('audiochannels').onclick).toString()
+
+        let videoquality = getVideoCheckBoxElements(document.getElementsByName('videoquality').onclick).toString()
+        
+
+        const configuration = {
+          api: apikey, linkLimit: linkLimit, sortValue:sortValue, audiochannels:audiochannels, videoquality:videoquality
         }
 
-        const configuration = encode(conf);
+        const configurationEncoded = encode(configuration);
 
         if (apikey != '') {
-          installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
+          installLink.href = 'stremio://' + window.location.host + '/'  + configurationEncoded + '/manifest.json';
         }
       }
     </script>
