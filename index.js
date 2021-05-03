@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
+const getPublicIP = require("./lib/getPublicIP");
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -14,11 +15,11 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.1.0",
+  version: "1.2.0",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
-  description: "Orion Stremio Addon. Orion API key is required to use this addon. Get it from panel.orionoid.com",
-  types: ["movie", "series", "others"],
+  description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be stream without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
+  types: ["movie", "series"],
   resources: [
     "stream"
   ],
@@ -26,8 +27,6 @@ var MANIFEST = {
   idPrefixes: ["tt"],
   behaviorHints: {configurable : true, configurationRequired: true }
 };
-
-addon.use(requestIp.mw())
 
 addon.get("/", async function (req, res) {
   res.redirect("/configure")
@@ -63,59 +62,15 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res, next) {
   let season = req.params.id.split(":")[1]
   let episode = req.params.id.split(":")[2]
 
-  const clientIp = requestIp.getClientIp(req); 
+  let  clientIp = requestIp.getClientIp(req); 
 
-  const ip = req.clientIp;
-  console.log("ip:",ip)
-  console.log("clientip:",clientIp)
+  if (clientIp.includes("::ffff:")) {
+    clientIp = await getPublicIP();
+  }
+    
+  const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
 
-  
-  const stream = await dataHandler(userConf, videoId, type, season, episode)
-
-  respond(res, { streams: stream,  cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
-});
-
-
- 
-addon.use(function(req, res) {
-    const ip = req.clientIp;
-    console.log(ip)
-    res.end(ip);
-});
-
-addon.get('/:userConf/:resource/:type/:id/:extra?.json', (req, res, next) => {
-  const { configuration, resource, type, id } = req.params;
-  const extra = req.params.extra ? qs.parse(req.url.split('/').pop().slice(0, -5)) : {}
-  const configValues = { ...extra, ...parseConfiguration(configuration), ip: requestIp.getClientIp(req) };
-  addonInterface.get(resource, type, id, configValues)
-      .then(resp => {
-        const cacheHeaders = {
-          cacheMaxAge: 'max-age',
-          staleRevalidate: 'stale-while-revalidate',
-          staleError: 'stale-if-error'
-        };
-        const cacheControl = Object.keys(cacheHeaders)
-            .map(prop => resp[prop] && cacheHeaders[prop] + '=' + resp[prop])
-            .filter(val => !!val).join(', ');
-
-        res.setHeader('Cache-Control', `${cacheControl}, public`);
-        res.setHeader('Content-Type', 'application/json; charset=utf-8');
-        res.end(JSON.stringify(resp));
-      })
-      .catch(err => {
-        if (err.noHandler) {
-          if (next) {
-            next()
-          } else {
-            res.writeHead(404);
-            res.end(JSON.stringify({ err: 'not found' }));
-          }
-        } else {
-          console.error(err);
-          res.writeHead(500);
-          res.end(JSON.stringify({ err: 'handler error' }));
-        }
-      });
+  respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
 

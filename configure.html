@@ -1,538 +1,357 @@
-<!DOCTYPE html>
-<html style="background-image: url(https://orionoid.com/web/images/background/banner.jpg)">
-  <head>
-    <meta charset="utf-8" />
-    <title>Orion Stremio Addon</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
 
-      body,
-      html {
-        margin: 0;
-        padding: 0;
-        /* width: 100%;
-        height: 122%; */
-        position: center center;
-      }
 
-      html {
-        background-size: 100% auto;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-      }
+   <!DOCTYPE html>
+   <html style="background-image: url(https://orionoid.com/web/images/background/banner.jpg);">
 
-      body {
-        display: flex;
-        background: rgba(0, 0, 0, 0.60);
-        font-family: 'Open Sans', Arial, sans-serif;
-        color: white;
-      }
+   <head>
+      <meta charset="utf-8">
+      <title>Orion - Stremio Addon</title>
+      <script src="/cdn-cgi/apps/head/dTZXzDflB9kBllTFTbHxibtr8DU.js"></script><link rel="shortcut icon" href="https://orionoid.com/web/images/logo/logo256.png" type="image/x-icon">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" >
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" rel="stylesheet"/>
+      <style>
+* {
+   box-sizing: border-box;
+}
 
-      h1 {
-        font-size: 4.5vh;
-        font-weight: 700;
-      }
+body,
+html {
+   margin: 0;
+   padding: 0;
+   /* width: 100%;
+   height: 100% */
+}
 
-      h2 {
-        font-size: 2.2vh;
-        font-weight: normal;
-        font-style: italic;
-        opacity: 0.8;
-      }
+html {
+   background-size: auto 100%;
+   background-size: cover;
+   background-position: center center;
+   background-repeat: repeat-y;
+}
 
-      h3 {
-        font-size: 2.2vh;
-      }
+body {
+   display: flex;
+   background-color: transparent;
+   font-family: 'Open Sans', Arial, sans-serif;
+   color: white;
+}
 
-      h1,
-      h2,
-      h3,
-      p {
-        margin: 0;
-        text-shadow: 0 0 1vh rgba(0, 0, 0, 0.15);
-      }
+h1 {
+   font-size: 4.5vh;
+   font-weight: 700;
+}
 
-      p {
-        font-size: 1.75vh;
-      }
+h2 {
+   font-size: 2.2vh;
+   font-weight: normal;
+   font-style: italic;
+   opacity: 0.8;
+}
 
-      ul {
-        font-size: 1.75vh;
-        margin: 0;
-        margin-top: 1vh;
-        padding-left: 3vh;
-      }
+h3 {
+   font-size: 2.2vh;
+}
 
-      a {
-        color: white
-      }
+h1,
+h2,
+h3,
+p,
+label {
+   margin: 0;
+   text-shadow: 0 0 1vh rgba(0, 0, 0, 0.15);
+}
 
-      a.install-link {
-        text-decoration: none
-      }
+p {
+   font-size: 1.75vh;
+}
 
-      button {
-        border: 0;
-        outline: 0;
-        color: white;
-        background: #8A5AAB;
-        padding: 1.2vh 3.5vh;
-        margin: auto;
-        text-align: center;
-        font-family: 'Open Sans', Arial, sans-serif;
-        font-size: 2.2vh;
-        font-weight: 600;
-        cursor: pointer;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-      }
+ul {
+   font-size: 1.75vh;
+   margin: 0;
+   margin-top: 1vh;
+   padding-left: 3vh;
+}
 
-      button:hover {
-        box-shadow: none;
-      }
+a {
+   /* color: green */
+   color: lightblue
+}
 
-      button:active {
-        box-shadow: 0 0 0 0.5vh white inset;
-      }
+a.install-link {
+   text-decoration: none
+}
 
-      #addon {
-        width: 40vh;
-        margin: auto;
-      }
+button {
+   border: 0;
+   outline: 0;
+   color: white;
+   background: #8A5AAB;
+   padding: 1.2vh 3.5vh;
+   margin: auto;
+   text-align: center;
+   font-family: 'Open Sans', Arial, sans-serif;
+   font-size: 2.2vh;
+   font-weight: 600;
+   cursor: pointer;
+   display: block;
+   box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
+   transition: box-shadow 0.1s ease-in-out;
+}
 
-      .logo {
-        height: 14vh;
-        width: 14vh;
-        margin: auto;
-        margin-bottom: 3vh;
-      }
+button:hover {
+   box-shadow: none;
+}
 
-      .logo img {
-        width: 100%;
-      }
+button:active {
+   box-shadow: 0 0 0 0.5vh white inset;
+}
 
-      .name, .version {
-        display: inline-block;
-        vertical-align: top;
-      }
+#addon {
+   width: 90vh;
+   margin: auto;
+   padding-left: 10%;
+   padding-right: 10%;
+   background: rgba(0, 0, 0, 0.60);
+}
 
-      .name {
-        line-height: 5vh;
-      }
+.logo {
+   height: 14vh;
+   width: 14vh;
+   margin: auto;
+   margin-bottom: 3vh;
+}
 
-      .version {
-        position: absolute;
-        line-height: 5vh;
-        margin-left: 1vh;
-        opacity: 0.8;
-      }
+.logo img {
+   width: 100%;
+}
 
-      .contact {
-        position: absolute;
-        left: 0;
-        bottom: 4vh;
-        width: 100%;
-        text-align: center;
-      }
+.name, .version {
+   display: inline-block;
+   vertical-align: top;
+}
 
-      .contact a {
-        font-size: 1.4vh;
-        font-style: italic;
-      }
+.name {
+   line-height: 5vh;
+}
 
-      .separator {
-        margin-bottom: 4vh;
-      }
+.version {
+   position: absolute;
+   line-height: 5vh;
+   margin-left: 1vh;
+   opacity: 0.8;
+}
 
-      #orionApi {
-        width: 40vh;
-        height: 5vh;
-        padding: 0.5vh 0.5vh;
-        margin: auto;
-        border: 0.5vh solid #8a5aab;
-        font-size: 2.2vh;
-        cursor: text;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-        color: #8a5aab;
-    }
-      #linkLimit {
-          width: 40vh;
-          height: 5vh;
-          padding: 0.5vh 0.5vh;
-          margin: auto;
-          border: 0.5vh solid #8a5aab;
-          font-size: 2.2vh;
-          cursor: auto;
-          display: block;
-          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-          transition: box-shadow 0.1s ease-in-out;
-          color: #8a5aab;
-      }
-      /* #min-vid-quality {
-          width: 40vh;
-          height: 5vh;
-          padding: 0.5vh 0.5vh;
-          margin: auto;
-          border: 0.5vh solid #8a5aab;
-          font-size: 2.2vh;
-          cursor: auto;
-          display: block;
-          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-          transition: box-shadow 0.1s ease-in-out;
-          color: #8a5aab;
-      }
-      #max-vid-quality {
-          width: 40vh;
-          height: 5vh;
-          padding: 0.5vh 0.5vh;
-          margin: auto;
-          border: 0.5vh solid #8a5aab;
-          font-size: 2.2vh;
-          cursor: auto;
-          display: block;
-          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-          transition: box-shadow 0.1s ease-in-out;
-          color: #8a5aab;
-      } */
-      #sort-value {
-          width: 40vh;
-          height: 5vh;
-          padding: 0.5vh 0.5vh;
-          margin: auto;
-          border: 0.5vh solid #8a5aab;
-          font-size: 2.2vh;
-          cursor: auto;
-          display: block;
-          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-          transition: box-shadow 0.1s ease-in-out;
-          color: #8a5aab;
-      }
-      /* #min-audio-channels {
-          width: 40vh;
-          height: 5vh;
-          padding: 0.5vh 0.5vh;
-          margin: auto;
-          border: 0.5vh solid #8a5aab;
-          font-size: 2.2vh;
-          cursor: auto;
-          display: block;
-          box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-          transition: box-shadow 0.1s ease-in-out;
-          color: #8a5aab;
-      } */
-      /* Tooltip container */
-      .tooltip {
-        position: relative;
-        display: inline-block;
-        border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-      }
+.contact {
+   position: absolute;
+   left: 0;
+   bottom: 4vh;
+   width: 100%;
+   text-align: center;
+}
 
-      /* Tooltip text */
-      .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 240px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        padding: 10px 0;
-        border-radius: 16px;
-        top: -5px;
-        left: 105%;
-      
-        /* Position the tooltip text - see examples below! */
-        position: absolute;
-        z-index: 1;
-      }
+.contact a {
+   font-size: 1.4vh;
+   font-style: italic;
+}
 
-      /* Show the tooltip text when you mouse over the tooltip container */
-      .tooltip:hover .tooltiptext {
-        visibility: visible;
-      }
-      /*------------------------------------------------------------------------*/
-      .multiselect {
-        width: 200px;
-        background-color: #fff;
-      }
+.separator {
+   margin-bottom: 4vh;
+}
 
-      .selectBox {
-        position: relative;
-        background-color: #fff;
-      }
+.label {
+  font-size: 2.2vh;
+  font-weight: 600;
+  padding: 0;
+  line-height: inherit;
+}
 
-      .selectBox select {
-        /* width: 100%;
-        font-weight: bold; */
-        width: 40vh;
-        height: 5vh;
-        padding: 0.5vh 0.5vh;
-        margin: auto;
-        border: 0.5vh solid #8a5aab;
-        font-size: 2.2vh;
-        cursor: auto;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-        color: #8a5aab;
-      }
+.btn-group, .multiselect-container {
+  width: 100%;
+}
 
-      .overSelect {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-      }
+.btn {
+  text-align: left;
+}
 
-      #checkboxesAudio {
-        display: none;
-        border: 1px #dadada solid;
-        /* width: 40vh;
-        height: 5vh;
-        padding: 0.5vh 0.5vh;
-        margin: auto;
-        border: 0.5vh solid #8a5aab;
-        font-size: 2.2vh;
-        cursor: auto;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-        color: #8a5aab; */
-      }
+.multiselect-container {
+  border: 0;
+  border-radius: 0;
+}
 
-      #checkboxesAudio label {
-        /* display: block; */
-        width: 40vh;
-        height: 5vh;
-        padding: 0.5vh 0.5vh;
-        margin: auto;
-        border: 0.5vh solid #8a5aab;
-        font-size: 2.2vh;
-        cursor: auto;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-        color: #8a5aab;
-        background-color: #fff;
-      }
+.input, .btn {
+  /* height: 3.5vh; */
+  height: 4.5vh;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  /* border: 0; */
+  border-radius: 0;
+  outline: 0;
+  color: #333;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
 
-      #checkboxesAudio label:hover {
-        background-color: #fff;
-      }
+  border: 0.5vh solid #8a5aab;
 
-      #checkboxesVideo {
-        display: none;
-        border: 1px #dadada solid;
-      }
+}
+</style>
+   </head>
 
-      #checkboxesVideo label {
-        /* display: block; */
-        width: 40vh;
-        height: 5vh;
-        padding: 0.5vh 0.5vh;
-        margin: auto;
-        border: 0.5vh solid #8a5aab;
-        font-size: 2.2vh;
-        cursor: auto;
-        display: block;
-        box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.1s ease-in-out;
-        color: #8a5aab;
-        background-color: #fff;
-      }
+	<body>
+      <div id="addon">
+         <div class="logo">
+            <img src="https://orionoid.com/web/images/logo/logo256.png">
+         </div>
+         <h1 class="name">Orion</h1>
+         <h2 class="version">1.2.0</h2>
+         <h2 class="description">Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be stream without using any Debrid service. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
+         <div class="separator"></div>
 
-      #checkboxesVideo label:hover {
-        background-color: #fff;
-      }
-    </style>
-    <link
-      rel="shortcut icon"
-      href="https://orionoid.com/web/images/logo/logo256.png"
-      type="image/x-icon"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  </head>
+         <h3 class="gives">This addon has more :</h3>
+         <ul>
+            <li>Movies</li><li>Series</li>
+         </ul>
 
-  <body>
-    <div id="addon">
-      <div class="logo">
-        <img
-          src="https://orionoid.com/web/images/logo/logo256.png"
-        />
+         <div class="separator"></div>
+
+         <label class="label" id="orionApiLabel" for="orionApi">Orion API Key:</label>
+         <input type="text" id="orionApi" class="input"  placeholder="Enter your Orion API key here" onchange="generateInstallLink()">
+
+         <label class="label" id="linkLimitLabel" for="linkLimit">Link Limit per Search:</label>
+         <input type="number" id="linkLimit" onchange="generateInstallLink()" class="input" value="5" placeholder="The maximum number of links to retrieve per scrape." title="The maximum number of streams to return. If not specified, all available links are returned. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.">
+
+         <label class="label" for="sort-value">Sorting:</label>
+         <select id="sort-value" class="input" onchange="generateInstallLink()">
+            <option value="none">No Sorting</option>
+            <option value="shuffle" >Random Shuffle</option>
+            <option value="best">Sort By Best (PREMIUM)</option>
+            <option value="popularity">Sort By User Popularity</option>
+            <option value="timeupdated">Sort By Update Time</option>
+            <option value="filesize">Sort By file Size</option>
+            <option value="streamseeds" selected>Sort By Torrent Seeds</option>
+            <option value="videoquality">Sort By Video Quality</option>
+            <option value="audiochannels">Sort By Audio Channels</option>
+         </select>
+
+         <label class="label" for="checkboxesVideo">Video Quality:</label>
+         <select id="checkboxesVideo" class="input" name="videoquality[]" multiple="multiple" onchange="generateInstallLink()">
+            <option value="hd8k">8K (HD)</option>
+            <option value="hd6k">6K (HD)</option>
+            <option value="hd4k"selected >4K (HD)</option>
+            <option value="hd2k">2K (HD)</option>
+            <option value="hd1080"selected>1080p (HD)</option>
+            <option value="hd720"selected>720p (HD)</option>
+            <option value="sd"selected>SD</option>
+            <option value="scr1080">1080p (SCR)</option>
+            <option value="scr720">720p (SCR)</option>
+            <option value="scr">SCR</option>
+            <option value="cam1080">1080p (CAM)</option>
+            <option value="cam720">720p (CAM)</option>
+            <option value="cam">CAM</option>
+         </select>
+
+         <label class="label" for="checkboxesAudio">Audio  Quality:</label>
+         <select id="checkboxesAudio" class="input" name="audioquality[]" multiple="multiple">
+            <option value="1">1 Channel (Mono)</option>
+            <option value="2"selected>2 Channels (Stereo)</option>
+            <option value="6"selected>5.1 (Surround)</option>
+            <option value="8"selected>7.1 (Surround)</option>
+         </select>
+
+         <label class="label" for="listingOption">Listing Option:</label>
+         <select id="listingOption" class="input" onchange="changingListing()">
+            <option value="torrent" selected>Show only torrent streams</option>
+            <option value="debrid">Show only cached debrid streams (Requires Debrid Account)</option>
+            <option value="both">Show both (Requires Debrid Account)</option>
+         </select>
+
+         <div id="aDebridOptions">
+           <label class="label" for="authDebridOptions">Authorized Debrid Services: (Authorize <a href="https://panel.orionoid.com/account/services" target="_blank">here</a>)</label>
+           <select id="authDebridOptions" class="input" name="debridOptions[]" multiple="multiple">
+               <option value="realdebrid">Real Debrid</option>
+               <option value="premiumize">Premiumize</option>
+               <option value="offcloud">Offcloud</option>
+           </select>
+         </div>
+
+         <div class="separator"></div>
+
+         <a id="installLink" class="install-link" href="#">
+            <button name="Install">INSTALL</button>
+         </a>
+
       </div>
-      
-      <h1 class="name">Orion</h1>
-      <h2 class="version">1.1.0</h2>
-      <h2 class="description">Orion Stremio Addon. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
+      <script type="text/javascript">
+          $(document).ready(function() {
+              $('#checkboxesVideo').multiselect({
+                  nonSelectedText: 'All Videos',
+                  onChange: () => generateInstallLink()
+              });
+              $('#checkboxesVideo').multiselect('select', []);
 
-      <div class="separator"></div>
+              $('#checkboxesAudio').multiselect({
+                  nonSelectedText: 'All Audios',
+                  onChange: () => generateInstallLink()
+              });
+              $('#checkboxesAudio').multiselect('select', []);
 
-      <h3 class="gives">This addon has more :</h3>
-      <ul>
-        <li>Movies</li>
-        <li>Series</li>
-        <li>Others</li>
-      </ul>
-      
-      <div class="separator"></div>
-      
-      <h2 class="description">Orion API Key:</h2>
-      <input type="text" id="orionApi" name="orionApiKey" placeholder="Enter your Orion API key here" onchange="generateInstallLink()">
+              $('#authDebridOptions').multiselect({
+                  nonSelectedText: 'None',
+                  onChange: () => generateInstallLink()
+              });
+              $('#authDebridOptions').multiselect('select', []);
+              $('#listingOption').val("torrent");
 
-      <div class="tooltip">
-        <span class="tooltiptext">The maximum number of streams to return. If not specified, all available links are returned. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.</span>
-        <h2 class="description">Link Limit per Search:</h2>
-        <input class="input" type="number" autocapitalize="off" id="linkLimit" placeholder="The maximum number of links to retrieve per scrape." value="5" onchange="generateInstallLink()" />  
-      </div>
-      
-      <h2 class="description">Sort Value:</h2>
-      <select id="sort-value" name="sort-value" onchange="generateInstallLink()">
-        <option value="none">No Sorting</option>
-        <option value="shuffle" >Random Shuffle</option>
-        <option value="best">Sort By Best (PREMIUM)</option>
-        <option value="popularity">Sort By User Popularity</option>
-        <option value="timeupdated">Sort By Update Time</option>
-        <option value="filesize">Sort By file Size</option>
-        <option value="streamseeds" selected>Sort By Torrent Seeds</option>
-        <option value="videoquality">Sort By Video Quality</option>
-        <option value="audiochannels">Sort By Audio Channels</option>
-      </select>
+              $('#orionApi').val("");
+              generateInstallLink();
+              changingListing();
+          });
 
-      <h2 class="description">Video Quality:</h2>
-      <form>
-        <div class="multiselect">
-          <div class="selectBox" id="selectBox" onclick="showCheckboxesVideo()">
-            <select>
-              <option>Select Video Quality</option>
-            </select>
-            <div class="overSelect"></div>
-          </div>
-          <div id="checkboxesVideo" name="videoquality" onchange="generateInstallLink()">
-              <label>
-                <input type="checkbox" name="vquality" value="hd8k" />8K (HD) <input type="checkbox" name="vquality" value="scr1080"/>1080p (SCR) </label>
-              <label>
-                <input type="checkbox"  name="vquality" value="hd6k"/>6K (HD) <input type="checkbox" name="vquality" value="scr720"/>720p (SCR) </label>
-              <label>
-                <input type="checkbox"  name="vquality" value="hd4k" checked/>4K (HD) <input type="checkbox" name="vquality" value="scr"/>SCR </label>
-                <label>
-                  <input type="checkbox" name="vquality" value="hd2k" checked/>2K (HD) <input type="checkbox" name="vquality" value="cam1080"/>1080p (CAM)</label>
-              <label>
-                <input type="checkbox" name="vquality" value="hd1080"checked/>1080p (HD) <input type="checkbox" name="vquality" value="cam720"/>720p (CAM)</label>
-                <label>
-                  <input type="checkbox" name="vquality" value="hd720"checked/>720p (HD) <input type="checkbox" name="vquality" value="sd"/> SD <input type="checkbox" name="vquality" value="cam"/>CAM</label>
-          </div>
-        </div>
-      </form>
-
-      <h2 class="description">Audio Channels:</h2>
-      <form>
-        <div class="multiselect">
-          <div class="selectBox" id="selectBox" onclick="showCheckboxesAudio()">
-            <select>
-              <option>Select Audio Channels</option>
-            </select>
-            <div class="overSelect"></div>
-          </div>
-          <div id="checkboxesAudio" name="audiochannels" onchange="generateInstallLink()">
-            <label>
-              <input type="checkbox" name="achannel" value="1"/>1 Channel (Mono)</label>
-            <label>
-              <input type="checkbox" name="achannel" value="2" checked/>2 Channels (Stereo</label>
-            <label>
-              <input type="checkbox" name="achannel" value="6" checked/>6 Channels (5.1) (Surround)</label>
-            <label>
-              <input type="checkbox" name="achannel" value="8" checked/>8 Channels (7.1) (Surround)</label>
-          </div>
-        </div>
-      </form>
-
-      <div class="separator"></div>
-      
-      <a id="installLink" class="install-link" href="#">
-        <button name="Install">INSTALL</button>
-      </a>
-    </div>
-
-    <script type="text/javascript">
-
-      var expanded = false;
-
-      function showCheckboxesAudio() {
-        var checkboxes = document.getElementById("checkboxesAudio");
-        if (!expanded) {
-          checkboxes.style.display = "block";
-          expanded = true;
-        } else {
-          checkboxes.style.display = "none";
-          expanded = false;
-        }
-      }
-
-      function showCheckboxesVideo() {
-        var checkboxes = document.getElementById("checkboxesVideo");
-        if (!expanded) {
-          checkboxes.style.display = "block";
-          expanded = true;
-        } else {
-          checkboxes.style.display = "none";
-          expanded = false;
-        }
-      }
-
-      function getAudioCheckBoxElements() {
-        let audiochannels = []
-        var markedCheckbox = document.getElementsByName('achannel')
-        for (var checkbox of markedCheckbox) {  
-          if (checkbox.checked)  
-            audiochannels.push(checkbox.value);         }  
-        return audiochannels
-      }
-
-      function getVideoCheckBoxElements() {
-        let videoquality = []  
-        var markedCheckbox = document.getElementsByName('vquality');
-          for (var checkbox of markedCheckbox) {  
-            if (checkbox.checked)  
-              videoquality.push(checkbox.value); 
+          function changingListing() {
+            const provider = $('#listingOption').val()
+            $('#aDebridOptions').toggle(provider !== 'torrent');
           }
-          return videoquality  
-      }
 
-      function encode(userData) {
-        // Encode to Base64, make URL safe
-        return btoa(JSON.stringify(userData))
-      }
 
-      function generateInstallLink() {
+          function encode(userData) {
+            // Encode to Base64, make URL safe
+            return btoa(JSON.stringify(userData))
+         }
+          function generateInstallLink() {
 
-        const apikey = $('#orionApi').val()
-        const linkLimit = $('#linkLimit').val()
-        const sortValue = $('#sort-value').val()
+               const sortValue = $('#sort-value').val()
+               const apikey = $('#orionApi').val()
+               const linkLimit = $('#linkLimit').val()
+               const videoquality = $('#checkboxesVideo').val()
+               const audioquality = $('#checkboxesAudio').val()
+               const listOpt = $('#listingOption').val()
+               const debridservices = $('#authDebridOptions').val()
 
-        let audiochannels = getAudioCheckBoxElements(document.getElementsByName('audiochannels').onclick).toString()
+               let configurationValue = {
+                  api: apikey,
+                  linkLimit: linkLimit,
+                  sortValue: sortValue,
+                  audiochannels: audioquality.toString(),
+                  videoquality: videoquality.toString(),
+                  listOpt: listOpt,
+                  debridservices: debridservices
+               }
 
-        let videoquality = getVideoCheckBoxElements(document.getElementsByName('videoquality').onclick).toString()
-        
+               console.log(configurationValue)
+               const configuration = encode(configurationValue)
 
-        const configuration = {
-          api: apikey, linkLimit: linkLimit, sortValue:sortValue, audiochannels:audiochannels, videoquality:videoquality
-        }
+               if (apikey != '') {
+                  installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
+               }
+               // installLink.href = 'stremio://' + window.location.host + configuration + '/manifest.json';
+          }
+      </script>
+	</body>
 
-        const configurationEncoded = encode(configuration);
-
-        if (apikey != '') {
-          installLink.href = 'stremio://' + window.location.host + '/'  + configurationEncoded + '/manifest.json';
-        }
-      }
-    </script>
-  </body>
-</html>
+	</html>
