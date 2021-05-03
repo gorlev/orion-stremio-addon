@@ -1,6 +1,9 @@
 # orion-stremio-addon
 Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be stream without using any Debrid service. Multiple Debrid services also can be used at the same time. Orion API key is required to use this addon. Get it from [https://panel.orionoid.com](https://panel.orionoid.com)
 
+### Attention
+Please be careful while setting the "Link Limit per Search" section. Link limit is the maximum number of streams to return. If not specified, all available links are returned. Make sure to specify a limit (default is 5), since without one you might use up the entire daily limit with one query.
+
 ## Installation
 
 ### Remote
