@@ -67,7 +67,8 @@ label {
 }
 
 p {
-   font-size: 1.75vh;
+   /* font-size: 1.75vh; */
+   font-size: 1.30vh;
 }
 
 ul {
@@ -212,7 +213,7 @@ button:active {
             <img src="https://orionoid.com/web/images/logo/logo256.png">
          </div>
          <h1 class="name">Orion</h1>
-         <h2 class="version">1.2.0</h2>
+         <h2 class="version">1.2.1</h2>
          <h2 class="description">Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
          <div class="separator"></div>
 
@@ -227,7 +228,10 @@ button:active {
          <input type="text" id="orionApi" class="input"  placeholder="Enter your Orion API key here" onchange="generateInstallLink()">
 
          <label class="label" id="linkLimitLabel" for="linkLimit">Link Limit per Search:</label>
-         <input type="number" id="linkLimit" onchange="generateInstallLink()" class="input" value="5" placeholder="The maximum number of links to retrieve per scrape." title="The maximum number of streams to return. If not specified, all available links are returned. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.">
+         <!-- <div><p>Increasing this number affects your daily limit and also slows down the addon's running speed. It is recommended to keep between 1-50. </p></div> -->
+         <input type="number" id="linkLimit" onchange="generateInstallLink()" class="input" value="5" min="1" max="50" placeholder="The maximum number of links to retrieve per scrape." title="The maximum number of streams to return. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.">
+         
+         <!-- <div class="separator"></div> -->
 
          <label class="label" for="sort-value">Sorting:</label>
          <select id="sort-value" class="input" onchange="generateInstallLink()">
@@ -345,7 +349,7 @@ button:active {
                   listOpt: listOpt,
                   debridservices: debridservices
                }
-
+               console.log(configurationValue)
                const configuration = encode(configurationValue)
 
                if (apikey != '') {
