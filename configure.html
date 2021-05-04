@@ -68,7 +68,7 @@ label {
 
 p {
    /* font-size: 1.75vh; */
-   font-size: 1.30vh;
+   font-size: 1.60vh;
 }
 
 ul {
@@ -213,7 +213,7 @@ button:active {
             <img src="https://orionoid.com/web/images/logo/logo256.png">
          </div>
          <h1 class="name">Orion</h1>
-         <h2 class="version">1.2.1</h2>
+         <h2 class="version">1.2.2</h2>
          <h2 class="description">Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
          <div class="separator"></div>
 
@@ -228,11 +228,8 @@ button:active {
          <input type="text" id="orionApi" class="input"  placeholder="Enter your Orion API key here" onchange="generateInstallLink()">
 
          <label class="label" id="linkLimitLabel" for="linkLimit">Link Limit per Search:</label>
-         <!-- <div><p>Increasing this number affects your daily limit and also slows down the addon's running speed. It is recommended to keep between 1-50. </p></div> -->
          <input type="number" id="linkLimit" onchange="generateInstallLink()" class="input" value="5" min="1" max="50" placeholder="The maximum number of links to retrieve per scrape." title="The maximum number of streams to return. Make sure to specify a limit, since without one you might use up the entire daily limit with one query.">
          
-         <!-- <div class="separator"></div> -->
-
          <label class="label" for="sort-value">Sorting:</label>
          <select id="sort-value" class="input" onchange="generateInstallLink()">
             <option value="none">No Sorting</option>
@@ -288,10 +285,23 @@ button:active {
          </div>
 
          <div class="separator"></div>
-
+         
          <a id="installLink" class="install-link" href="#">
             <button name="Install">INSTALL</button>
          </a>
+         
+         <div class="separator"></div>
+         
+         <div id="installLinkInfo" style="display: none;">
+            <p>ℹ️ If the installation button doesn't work, you can just paste the generated URL into the Stremio addon search bar:  <a href="https://user-images.githubusercontent.com/1777923/43146711-65a33ccc-8f6a-11e8-978e-4c69640e63e3.png" target="_blank">(Tutorial)</a><br>
+               <input type="text" class="input" id="installURL" readonly><button onclick="copy('installURL'); return false;" title="Copy to clipboard">📋</button></p>
+         </div>
+            
+            
+         <div class="separator"></div>
+
+         <p>- If you are reinstalling this addon, please uninstall the previous version from the Stremio addons section.<br>
+         <p>- In particular, each debrid link takes about 0.5 seconds to generate. Hence, the higher link limit takes longer for the addon to load. On top of that, it may cause the remote server to give a request timeout error and the addon to crash and give no results. <br>
 
       </div>
       <script type="text/javascript">
@@ -327,9 +337,14 @@ button:active {
 
 
           function encode(userData) {
-            // Encode to Base64, make URL safe
             return btoa(JSON.stringify(userData))
          }
+
+         function copy(id){
+            document.getElementById(id).select();
+            document.execCommand("copy");
+         }
+
           function generateInstallLink() {
 
                const sortValue = $('#sort-value').val()
@@ -351,6 +366,10 @@ button:active {
                }
                console.log(configurationValue)
                const configuration = encode(configurationValue)
+
+               document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
+               document.getElementById("installLinkInfo").style.display = "block";
+               
 
                if (apikey != '') {
                   installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
