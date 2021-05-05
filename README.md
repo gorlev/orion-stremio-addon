@@ -22,6 +22,4 @@ Features I would like to implement and stuff needed to be done:
 ## Contributions
 Great thanks to:
 * Orion Team for their great support.
-* [tmdb-addon](https://github.com/mrcanelas/tmdb-addon) and
-* [torrentio-addon](https://github.com/TheBeastLT/torrentio-scraper)
-for the idea of preparing the configuration page. 
+* [tmdb-addon](https://github.com/mrcanelas/tmdb-addon), [torrentio-addon](https://github.com/TheBeastLT/torrentio-scraper) and [deflix-stremio](https://github.com/doingodswork/deflix-stremio) for the idea of preparing the configuration page. 

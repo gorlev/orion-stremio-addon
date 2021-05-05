@@ -5,6 +5,7 @@ require('dotenv').config();
 const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
 const getPublicIP = require("./lib/getPublicIP");
+const { publishToCentral } = require("stremio-addon-sdk");
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,7 +16,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.2.2",
+  version: "1.2.3",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -73,6 +74,7 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res, next) {
   respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
+publishToCentral("https://5a0d1888fa64-orion.baby-beamup.club/manifest.json")
 
 if (module.parent) {
   module.exports = addon;
