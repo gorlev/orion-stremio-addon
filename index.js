@@ -16,7 +16,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.2.8",
+  version: "1.2.9",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -90,6 +90,8 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
   respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
+
+publishToCentral("https://orion-stremio-addon.herokuapp.com/manifest.json")
 
 if (module.parent) {
   module.exports = addon;
