@@ -16,7 +16,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.2.6",
+  version: "1.2.7",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -67,8 +67,8 @@ addon.get('/:userConf/manifest.json', async function (req, res) {
 
 const nrOfDays = (nr) => nr * (24 * 3600);
 
-addon.get('/:userConf/stream/:type/:id.json', async function (req, res, next) {
-  console.log(req.params.type, req.params.id)
+addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
+  //console.log(req.params.type, req.params.id)
 
   let userConf = req.params.userConf
   let videoId =  req.params.id.split(":")[0]
