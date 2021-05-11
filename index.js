@@ -29,13 +29,13 @@ var MANIFEST = {
   behaviorHints: {configurable : true, configurationRequired: true }
 };
 
-addon.get("/", async function (req, res) {
-  res.redirect("https://5a0d1888fa64-orion.baby-beamup.club/configure")
-});
-
 // addon.get("/", async function (req, res) {
-//   res.redirect("/configure")
+//   res.redirect("https://5a0d1888fa64-orion.baby-beamup.club/configure")
 // });
+
+addon.get("/", async function (req, res) {
+  res.redirect("/configure")
+});
 
 addon.get("/manifest.json", async function (req, res) {
   respond(res, MANIFEST);
