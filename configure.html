@@ -213,7 +213,7 @@ button:active {
             <img src="https://orionoid.com/web/images/logo/logo256.png">
          </div>
          <h1 class="name">Orion</h1>
-         <h2 class="version">1.2.2</h2>
+         <h2 class="version">1.2.8</h2>
          <h2 class="description">Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
          <div class="separator"></div>
 
@@ -282,6 +282,7 @@ button:active {
                <option value="premiumize">Premiumize</option>
                <option value="offcloud">Offcloud</option>
            </select>
+           <p> ❗❗ Tick if you only have a Premium Debrid Account ❗❗<br>
          </div>
 
          <div class="separator"></div>
@@ -292,7 +293,7 @@ button:active {
          
          <div class="separator"></div>
          
-         <div id="installLinkInfo" style="display: none;">
+         <div id="installLinkInfo">
             <p>ℹ️ If the installation button doesn't work, you can just paste the generated URL into the Stremio addon search bar:  <a href="https://user-images.githubusercontent.com/1777923/43146711-65a33ccc-8f6a-11e8-978e-4c69640e63e3.png" target="_blank">(Tutorial)</a><br>
                <input type="text" class="input" id="installURL" readonly><button onclick="copy('installURL'); return false;" title="Copy to clipboard">📋</button></p>
          </div>
@@ -301,6 +302,7 @@ button:active {
          <div class="separator"></div>
 
          <p>- If you are reinstalling this addon, please uninstall the previous version from the Stremio addons section.<br>
+         <p>- Please DO NOT check the Authorized Debrid Services checkboxes if you don't have a premium account.<br>
          <p>- In particular, each debrid link takes about 0.5 seconds to generate. Hence, the higher link limit takes longer for the addon to load. On top of that, it may cause the remote server to give a request timeout error and the addon to crash and give no results. <br>
 
       </div>
@@ -337,7 +339,7 @@ button:active {
 
 
           function encode(userData) {
-            return btoa(JSON.stringify(userData))
+            return btoa(JSON.stringify(userData)).replace(/\+/g, '-').replace(/\//g, '_').split('=')[0]
          }
 
          function copy(id){
@@ -368,7 +370,6 @@ button:active {
                const configuration = encode(configurationValue)
 
                document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
-               document.getElementById("installLinkInfo").style.display = "block";
                
 
                if (apikey != '') {
