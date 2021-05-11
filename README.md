@@ -7,7 +7,7 @@ Please be careful while setting the "Link Limit per Search" section. Link limit 
 ## Installation
 
 ### Remote
-Click on [https://orion-stremio-addon.herokuapp.com](https://orion-stremio-addon.herokuapp.com) and make your adjustments. Then, click install.
+Click on [https://5a0d1888fa64-orion.baby-beamup.club](https://5a0d1888fa64-orion.baby-beamup.club) and make your adjustments. Then, click install.
 
 ### Local
 Unfortunately, local usage is not possible because you will need the app API key.
