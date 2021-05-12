@@ -37,9 +37,16 @@ addon.get("/", async function (req, res) {
   res.redirect("/configure")
 });
 
-addon.get("/manifest.json", async function (req, res) {
-  respond(res, MANIFEST);
-});
+// addon.get("/manifest.json", async function (req, res) {
+//   respond(res, MANIFEST);
+// });
+
+addon.get('/manifest.json', async function (req, res) {
+  const newManifest = { ...MANIFEST };
+    newManifest.behaviorHints.configurationRequired = true;
+    respond(res, newManifest);
+  }
+);
 
 addon.get("/:userConf?/configure", async function (req, res) {
   res.sendFile(path.join(__dirname+'/configure.html'));
@@ -60,7 +67,6 @@ addon.get("/:userConf?/configure", async function (req, res) {
 addon.get('/:userConf/manifest.json', async function (req, res) {
   const newManifest = { ...MANIFEST };
   if (!((req || {}).params || {}).userConf) {
-
         newManifest.behaviorHints.configurationRequired = true;
         respond(res, newManifest);
     } else {
