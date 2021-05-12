@@ -16,7 +16,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.2.9",
+  version: "1.3.0",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -37,6 +37,10 @@ addon.get("/", async function (req, res) {
   res.redirect("/configure")
 });
 
+addon.get("/:userConf?/configure", async function (req, res) {
+  res.sendFile(path.join(__dirname+'/configure.html'));
+});
+
 // addon.get("/manifest.json", async function (req, res) {
 //   respond(res, MANIFEST);
 // });
@@ -47,10 +51,6 @@ addon.get('/manifest.json', async function (req, res) {
     respond(res, newManifest);
   }
 );
-
-addon.get("/:userConf?/configure", async function (req, res) {
-  res.sendFile(path.join(__dirname+'/configure.html'));
-});
 
 // addon.get('/:userConf/manifest.json', async function (req, res) {
 
