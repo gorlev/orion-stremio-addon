@@ -6,6 +6,8 @@ const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
 const getPublicIP = require("./lib/getPublicIP");
 const { publishToCentral } = require("stremio-addon-sdk");
+const debridLinkResolver = require("./lib/debridLinkResolver");
+const config = require("./config");
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,7 +18,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.3.1",
+  version: "1.3.3",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
@@ -61,7 +63,7 @@ addon.get('/manifest.json', async function (req, res) {
 // 		MANIFEST.behaviorHints.configurationRequired = false;
 //     respond(res, MANIFEST);
 //   }
-  
+
 // });
 
 addon.get('/:userConf/manifest.json', async function (req, res) {
@@ -85,24 +87,45 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   let type = req.params.type
   let season = req.params.id.split(":")[1]
   let episode = req.params.id.split(":")[2]
-
-  let  clientIp = requestIp.getClientIp(req); 
+  let clientIp = requestIp.getClientIp(req);
 
   if (clientIp.includes("::ffff:")) {
     clientIp = await getPublicIP();
   }
-    
+
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
+  //console.log(`Total number of streams: ${stream.length}`)
 
   respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
-//publishToCentral("https://orion-stremio-addon.herokuapp.com/manifest.json")
+addon.get('/download/:keyuser/:service/:iditem/:idstream', async function (req, res) {
+
+  let keyuser = req.params.keyuser
+  let service = req.params.service
+  let iditem = req.params.iditem
+  let idstream = req.params.idstream
+  let clientIp = requestIp.getClientIp(req);
+
+  if (clientIp.includes("::ffff:")) {
+    clientIp = await getPublicIP();
+  }
+
+  debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp)
+  // console.log(debridLink)
+
+  res.redirect(debridLink.originalLink)
+});
+
 
 if (module.parent) {
   module.exports = addon;
 } else {
-  addon.listen(process.env.PORT || 3634, function () {
-    console.log(`Add-on Repository URL: http://127.0.0.1:3634/manifest.json`);
+  addon.listen( config.port, async function () {
+    console.log(config)
+    const publicIP = await getPublicIP()
+    console.log(`Public IP of the remote server: ${publicIP}`)
+  // addon.listen(process.env.PORT || 3634, function () {
+  // console.log(`Add-on Repository URL: http://127.0.0.1:3634/manifest.json`);
   });
 }
