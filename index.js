@@ -8,6 +8,7 @@ const getPublicIP = require("./lib/getPublicIP");
 const { publishToCentral } = require("stremio-addon-sdk");
 const debridLinkResolver = require("./lib/debridLinkResolver");
 const config = require("./config");
+const kitsuHandler = require("./lib/kitsuHandler");
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -24,16 +25,12 @@ var MANIFEST = {
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
   types: ["movie", "series"],
   resources: [
-    "stream"
+    "stream", "meta"
   ],
   catalogs: [],
-  idPrefixes: ["tt"],
+  idPrefixes: ["tt", "kitsu"],
   behaviorHints: {configurable : true, configurationRequired: true }
 };
-
-// addon.get("/", async function (req, res) {
-//   res.redirect("https://5a0d1888fa64-orion.baby-beamup.club/configure")
-// });
 
 addon.get("/", async function (req, res) {
   res.redirect("/configure")
@@ -43,28 +40,12 @@ addon.get("/:userConf?/configure", async function (req, res) {
   res.sendFile(path.join(__dirname+'/configure.html'));
 });
 
-// addon.get("/manifest.json", async function (req, res) {
-//   respond(res, MANIFEST);
-// });
-
 addon.get('/manifest.json', async function (req, res) {
   const newManifest = { ...MANIFEST };
     newManifest.behaviorHints.configurationRequired = true;
     respond(res, newManifest);
   }
 );
-
-// addon.get('/:userConf/manifest.json', async function (req, res) {
-
-//   if (typeof req.params.userConf === "undefined") {
-// 		MANIFEST.behaviorHints.configurationRequired = true;
-// 		respond(res, MANIFEST);
-// 	} else {
-// 		MANIFEST.behaviorHints.configurationRequired = false;
-//     respond(res, MANIFEST);
-//   }
-
-// });
 
 addon.get('/:userConf/manifest.json', async function (req, res) {
   const newManifest = { ...MANIFEST };
@@ -80,7 +61,6 @@ addon.get('/:userConf/manifest.json', async function (req, res) {
 const nrOfDays = (nr) => nr * (24 * 3600);
 
 addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
-  //console.log(req.params.type, req.params.id)
 
   let userConf = req.params.userConf
   let videoId =  req.params.id.split(":")[0]
@@ -91,11 +71,21 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
   if (clientIp.includes("::ffff:")) {
     clientIp = await getPublicIP();
+  } //Only for local testing.
+
+  if (req.params.id.includes("kitsu")) {
+
+    let kitsuID = req.params.id.split(":")[1]
+    let responseKitsuHandler = await kitsuHandler(kitsuID)
+
+    if(responseKitsuHandler !== undefined){
+      videoId = responseKitsuHandler.imdbID
+      season = responseKitsuHandler.season || 1
+    }
   }
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
-  //console.log(`Total number of streams: ${stream.length}`)
-
+  
   respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
@@ -109,12 +99,15 @@ addon.get('/download/:keyuser/:service/:iditem/:idstream', async function (req, 
 
   if (clientIp.includes("::ffff:")) {
     clientIp = await getPublicIP();
-  }
+  } //Only for local testing.
 
   debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp)
-  // console.log(debridLink)
 
-  res.redirect(debridLink.originalLink)
+  if (debridLink.originalLink === undefined) {
+    res.redirect(debridLink.streamLink)
+  }else {
+    res.redirect(debridLink.originalLink)
+  }
 });
 
 addon.get('/serverip', async function (req, res) {
@@ -122,14 +115,16 @@ addon.get('/serverip', async function (req, res) {
   res.send(publicIP);
 });
 
-
 if (module.parent) {
   module.exports = addon;
 } else {
   addon.listen( config.port, async function () {
-    console.log(config)
-    const publicIP = await getPublicIP()
-    console.log(`Public IP of the remote server: ${publicIP}`)
+  console.log(config)
+
+  // const publicIP = await getPublicIP()
+  // console.log(`Public IP of the remote server: ${publicIP}`)
+
+
   // addon.listen(process.env.PORT || 3634, function () {
   // console.log(`Add-on Repository URL: http://127.0.0.1:3634/manifest.json`);
   });
