@@ -1,12 +1,13 @@
 
 
    <!DOCTYPE html>
-   <html style="background-image: url(https://orionoid.com/web/images/background/banner.jpg);">
-
+   <!-- <html style="background-image: url(https://orionoid.com/web/images/background/banner.jpg);"> -->
+   <html style="background-image: url(<%=MANIFEST.background%>);">
    <head>
       <meta charset="utf-8">
       <title>Orion - Stremio Addon</title>
-      <script src="/cdn-cgi/apps/head/dTZXzDflB9kBllTFTbHxibtr8DU.js"></script><link rel="shortcut icon" href="https://orionoid.com/web/images/logo/logo256.png" type="image/x-icon">
+      <!-- <script src="/cdn-cgi/apps/head/dTZXzDflB9kBllTFTbHxibtr8DU.js"></script> <link rel="shortcut icon" href="https://orionoid.com/web/images/logo/logo256.png" type="image/x-icon"> -->
+      <!-- <script src="/cdn-cgi/apps/head/dTZXzDflB9kBllTFTbHxibtr8DU.js"></script> --> <link rel="shortcut icon" href="<%=MANIFEST.logo%>" type="image/x-icon">
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
@@ -210,16 +211,19 @@ button:active {
 	<body>
       <div id="addon">
          <div class="logo">
-            <img src="https://orionoid.com/web/images/logo/logo256.png">
+            <!-- <img src="https://orionoid.com/web/images/logo/logo256.png"> -->
+            <img src="<%=MANIFEST.logo%>">
          </div>
-         <h1 class="name">Orion</h1>
-         <h2 class="version">1.3.4</h2>
+         <!-- <h1 class="name">Orion</h1> -->
+         <h1 class="name"><%=MANIFEST.name%></h1>
+         <!-- <h2 class="version">1.3.4</h2> -->
+         <h2 class="version"><%=MANIFEST.version%></h2>
          <h2 class="description">Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from <a href="https://panel.orionoid.com/" target="_blank">panel.orionoid.com</a></h2>
          <div class="separator"></div>
 
          <h3 class="gives">This addon has more :</h3>
          <ul>
-            <li>Movies</li><li>Series</li>
+            <li>Movies</li><li>Series</li><li>Others</li>
          </ul>
          <div class="separator"></div>
          <p>❗ Free Orion users may not get any results. This is a known issue at the moment.<br>
@@ -377,12 +381,11 @@ button:active {
                   listOpt: listOpt,
                   debridservices: debridservices
                }
-               console.log(configurationValue)
+               // console.log(configurationValue)
                const configuration = encode(configurationValue)
 
                document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
                
-
                if (apikey != '') {
                   installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
                }

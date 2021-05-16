@@ -5,10 +5,10 @@ require('dotenv').config();
 const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
 const getPublicIP = require("./lib/getPublicIP");
-const { publishToCentral } = require("stremio-addon-sdk");
 const debridLinkResolver = require("./lib/debridLinkResolver");
 const config = require("./config");
 const kitsuHandler = require("./lib/kitsuHandler");
+
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,11 +19,12 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.3.4",
+  version: "1.3.5",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
+  background: "https://orionoid.com/web/images/background/banner.jpg",
   description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
-  types: ["movie", "series"],
+  types: ["movie", "series", "others"],
   resources: [
     "stream", "meta"
   ],
@@ -32,13 +33,22 @@ var MANIFEST = {
   behaviorHints: {configurable : true, configurationRequired: true }
 };
 
+addon.engine('html', require('ejs').renderFile);
+// addon.set('view engine', 'html');
+addon.set('views', __dirname);
+
+
 addon.get("/", async function (req, res) {
   res.redirect("/configure")
 });
 
 addon.get("/:userConf?/configure", async function (req, res) {
-  res.sendFile(path.join(__dirname+'/configure.html'));
+  res.render('configure.html',{MANIFEST});
 });
+
+// addon.get("/:userConf?/configure", async function (req, res) {
+//   res.sendFile(path.join(__dirname+'/configure.html'));
+// });
 
 addon.get('/manifest.json', async function (req, res) {
   const newManifest = { ...MANIFEST };
@@ -116,9 +126,9 @@ addon.get('/serverip', async function (req, res) {
 });
 
 if (module.parent) {
-  module.exports = addon;
+  module.exports = addon,MANIFEST;
 } else {
-  addon.listen( config.port, async function () {
+  addon.listen( config.port, function () {
   console.log(config)
 
   // const publicIP = await getPublicIP()
