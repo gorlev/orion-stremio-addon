@@ -19,7 +19,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.3.5",
+  version: "1.4.0",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   background: "https://orionoid.com/web/images/background/banner.jpg",
@@ -99,26 +99,26 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
 });
 
-addon.get('/download/:keyuser/:service/:iditem/:idstream', async function (req, res) {
+// addon.get('/download/:keyuser/:service/:iditem/:idstream', async function (req, res) {
 
-  let keyuser = req.params.keyuser
-  let service = req.params.service
-  let iditem = req.params.iditem
-  let idstream = req.params.idstream
-  let clientIp = requestIp.getClientIp(req);
+//   let keyuser = req.params.keyuser
+//   let service = req.params.service
+//   let iditem = req.params.iditem
+//   let idstream = req.params.idstream
+//   let clientIp = requestIp.getClientIp(req);
 
-  if (clientIp.includes("::ffff:")) {
-    clientIp = await getPublicIP();
-  } //Only for local testing.
+//   if (clientIp.includes("::ffff:")) {
+//     clientIp = await getPublicIP();
+//   } //Only for local testing.
 
-  debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp)
+//   debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp)
 
-  if (debridLink.originalLink === undefined) {
-    res.redirect(debridLink.streamLink)
-  }else {
-    res.redirect(debridLink.originalLink)
-  }
-});
+//   if (debridLink.originalLink === undefined) {
+//     res.redirect(debridLink.streamLink)
+//   }else {
+//     res.redirect(debridLink.originalLink)
+//   }
+// });
 
 addon.get('/serverip', async function (req, res) {
   const publicIP = await getPublicIP();
@@ -130,12 +130,5 @@ if (module.parent) {
 } else {
   addon.listen( config.port, function () {
   console.log(config)
-
-  // const publicIP = await getPublicIP()
-  // console.log(`Public IP of the remote server: ${publicIP}`)
-
-
-  // addon.listen(process.env.PORT || 3634, function () {
-  // console.log(`Add-on Repository URL: http://127.0.0.1:3634/manifest.json`);
   });
 }

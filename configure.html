@@ -225,8 +225,8 @@ button:active {
          <ul>
             <li>Movies</li><li>Series</li><li>Others</li>
          </ul>
-         <div class="separator"></div>
-         <p>❗ Free Orion users may not get any results. This is a known issue at the moment.<br>
+         <!-- <div class="separator"></div>
+         <p>❗ Free Orion users may not get any results. This is a known issue at the moment.<br> -->
 
          <div class="separator"></div>
 
@@ -240,7 +240,7 @@ button:active {
          <select id="sort-value" class="input" onchange="generateInstallLink()">
             <option value="none">No Sorting</option>
             <option value="shuffle" >Random Shuffle</option>
-            <option value="best">Sort By Best (PREMIUM)</option>
+            <option value="best">Sort By Best</option>
             <option value="popularity">Sort By User Popularity</option>
             <option value="timeupdated">Sort By Update Time</option>
             <option value="filesize">Sort By file Size</option>
@@ -304,24 +304,20 @@ button:active {
                <input type="text" class="input" id="installURL" readonly><button onclick="copy('installURL'); return false;" title="Copy to clipboard">📋</button></p>
          </div>
             
-         <div class="separator"></div>
+         <!-- <div class="separator"></div>
 
          <div id="herokuLinkInfo">
             <p>ℹ️ If this version of the addon does not work, please try the Heroku version:</a><br>
             <button OnClick=" location.href='https://orion-stremio-addon.herokuapp.com/configure' ">HEROKU</button>
-         </div>
+         </div> -->
             
          <div class="separator"></div>
 
          <p>- If you are reinstalling this addon, please uninstall the previous version from the Stremio addons section.<br>
-         <p>- Please DO NOT check the Authorized Debrid Services checkboxes if you don't have a premium account.<br>
+         <p>- Please DO NOT check the Authorized Debrid Services checkboxes if you don't have a premium debrid account.<br>
          <p>- Added Anime Kitsu support.<br>
          <p>- Addon loading time issues are fixed.<br>
-         <p>- We are working so that free Orion users can also use this addon.<br>
-         <div class="separator"></div>
-         <p>ℹ️ I am leaving the city for a month and will not have internet access. I have to take a break from development until June 18, 2021.<br>
-
-
+         <p>- Fixed issues with free Orion accounts.<br>
 
       </div>
       <script type="text/javascript">
