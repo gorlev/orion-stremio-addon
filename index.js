@@ -19,7 +19,7 @@ var respond = function (res, data) {
 
 var MANIFEST = {
   id: "org.community.orion",
-  version: "1.4.2",
+  version: "1.4.3",
   name: "Orion",
   logo: "https://orionoid.com/web/images/logo/logo256.png",
   background: "https://orionoid.com/web/images/background/banner.jpg",
