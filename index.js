@@ -8,6 +8,7 @@ const getPublicIP = require("./lib/getPublicIP");
 const debridLinkResolver = require("./lib/debridLinkResolver");
 const config = require("./config");
 const kitsuHandler = require("./lib/kitsuHandler");
+const MANIFEST = require("./lib/manifest")
 
 
 var respond = function (res, data) {
@@ -17,21 +18,9 @@ var respond = function (res, data) {
   res.send(data);
 };
 
-var MANIFEST = {
-  id: "org.community.orion",
-  version: "1.4.3",
-  name: "Orion",
-  logo: "https://orionoid.com/web/images/logo/logo256.png",
-  background: "https://orionoid.com/web/images/background/banner.jpg",
-  description: "Orion Stremio Addon, allows Orion-indexed torrent, usenet and hoster links to be played on Stremio. Cached links can be played with RealDebrid, Premiumize or Offcloud. Torrents can be streamed without using any Debrid service. Orion API key is required to use this addon. Get it from panel.orionoid.com",
-  types: ["movie", "series", "others"],
-  resources: [
-    "stream", "meta"
-  ],
-  catalogs: [],
-  idPrefixes: ["tt", "kitsu"],
-  behaviorHints: {configurable : true, configurationRequired: true }
-};
+const CACHE_MAX_AGE = 4 * 60 * 60; // 4 hours in seconds
+const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
+const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
 
 addon.engine('html', require('ejs').renderFile);
 // addon.set('view engine', 'html');
@@ -45,10 +34,6 @@ addon.get("/", async function (req, res) {
 addon.get("/:userConf?/configure", async function (req, res) {
   res.render('configure.html',{MANIFEST});
 });
-
-// addon.get("/:userConf?/configure", async function (req, res) {
-//   res.sendFile(path.join(__dirname+'/configure.html'));
-// });
 
 addon.get('/manifest.json', async function (req, res) {
   const newManifest = { ...MANIFEST };
@@ -95,30 +80,37 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   }
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
-  
-  respond(res, { streams: stream, cacheMaxAge: nrOfDays(stream.length > 0 ? 7 : 1), staleRevalidate: nrOfDays(2), staleError: nrOfDays(7) });
+  respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
 });
 
-// addon.get('/download/:keyuser/:service/:iditem/:idstream', async function (req, res) {
+addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
 
-//   let keyuser = req.params.keyuser
-//   let service = req.params.service
-//   let iditem = req.params.iditem
-//   let idstream = req.params.idstream
-//   let clientIp = requestIp.getClientIp(req);
+  let keyuser = req.params.keyuser
+  let service = req.params.service
+  let iditem = req.params.iditem
+  let idstream = req.params.idstream
+  let episodenumber = req.params.episodenumber
 
-//   if (clientIp.includes("::ffff:")) {
-//     clientIp = await getPublicIP();
-//   } //Only for local testing.
+  let clientIp = requestIp.getClientIp(req);
 
-//   debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp)
+  if (clientIp.includes("::ffff:")) {
+    clientIp = await getPublicIP();
+  } //Only for local testing.
 
-//   if (debridLink.originalLink === undefined) {
-//     res.redirect(debridLink.streamLink)
-//   }else {
-//     res.redirect(debridLink.originalLink)
-//   }
-// });
+  debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp,episodenumber)
+
+  if(debridLink === "error" || "" || undefined){
+    const video = `${__dirname}/videos/error.mp4`;
+    res.download(video);
+  }
+  else if (debridLink === "busy"){
+    const video = `${__dirname}/videos/download-started.mp4`;
+    res.download(video);
+  }else{
+    res.redirect(debridLink)  
+  }
+});
+
 
 addon.get('/serverip', async function (req, res) {
   const publicIP = await getPublicIP();
