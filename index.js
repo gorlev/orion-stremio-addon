@@ -115,6 +115,7 @@ addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async 
 addon.get('/serverip', async function (req, res) {
   const publicIP = await getPublicIP();
   res.send(publicIP);
+  res.end()
 });
 
 if (module.parent) {
