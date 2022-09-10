@@ -357,7 +357,9 @@ button:active {
             <p> ❗❗ Tick if you only have a Premium Debrid Account ❗❗<br>
          </div>
 
-
+         <label class="label" id="addParamsLabel" for="addParams">Additional Parameters: (Optional)</label>
+         <input type="text" id="addParams" class="input"  placeholder=" eg: filepack=false&videocodec=h264,-h265" onchange="generateInstallLink()">
+         <p> Any additional parameters as specified in the  <a href="https://panel.orionoid.com/developers/" target="_blank">API documentation</a>.<br>
 
          <div class="separator"></div>
             
@@ -380,6 +382,7 @@ button:active {
          <p>- Auto next episode feature has been added.<br>
          <p>- Audio language selection feature has been implemented.<br>
          <p>- Added support for AllDebrid and DebridLink.<br>
+         <p>- Added "Additional Parameters" support.<br>
             
          <div class="separator"></div>
          <p>If you encounter any bugs and have a feature request, please email to gorlevdev@gmail.com.<br>
@@ -417,6 +420,7 @@ button:active {
 
 
               $('#orionApi').val("");
+              $('#addParams').val("");
               generateInstallLink();
               changingListing();
               changingAudioLang();
@@ -452,7 +456,7 @@ button:active {
                const debridservices = $('#authDebridOptions').val()
 
                const audiolanguages = $('#authAudioOptions').val()
-
+               const additionalParameters = $('#addParams').val()
 
                let configurationValue = {
                   api: apikey,
@@ -462,7 +466,8 @@ button:active {
                   videoquality: videoquality.toString(),
                   listOpt: listOpt,
                   debridservices: debridservices,
-                  audiolanguages: audiolanguages
+                  audiolanguages: audiolanguages,
+                  additionalParameters
                }
                // console.log(configurationValue)
                const configuration = encode(configurationValue)
