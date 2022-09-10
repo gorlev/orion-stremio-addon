@@ -31,29 +31,29 @@ addon.get("/", async function (req, res) {
   res.redirect("/configure")
 });
 
-addon.get("/:userConf?/configure", async function (req, res) {
+addon.get("/:userConf?/configure", function (req, res) {
   res.render('configure.html',{MANIFEST});
 });
 
-addon.get('/manifest.json', async function (req, res) {
+addon.get('/manifest.json', function (req, res) {
   const newManifest = { ...MANIFEST };
     newManifest.behaviorHints.configurationRequired = true;
     respond(res, newManifest);
   }
 );
 
-addon.get('/:userConf/manifest.json', async function (req, res) {
+addon.get('/:userConf/manifest.json', function (req, res) {
   const newManifest = { ...MANIFEST };
   if (!((req || {}).params || {}).userConf) {
-        newManifest.behaviorHints.configurationRequired = true;
-        respond(res, newManifest);
-    } else {
-        newManifest.behaviorHints.configurationRequired = false;
-        respond(res, newManifest);
+    newManifest.behaviorHints.configurationRequired = true;
+    respond(res, newManifest);
+  } else {
+    newManifest.behaviorHints.configurationRequired = false;
+    respond(res, newManifest);
   }
 });
 
-const nrOfDays = (nr) => nr * (24 * 3600);
+// const nrOfDays = (nr) => nr * (24 * 3600);
 
 addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
