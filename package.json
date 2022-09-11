@@ -5,10 +5,9 @@
   "main": "index.js",
   "directories": {
     "lib": "lib",
-    "videos":"videos"
+    "videos": "videos"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
   "author": "",
@@ -20,7 +19,6 @@
     "express": "^4.17.1",
     "node-cache": "^5.1.2",
     "path": "^0.12.7",
-    "request-ip": "^2.1.3",
-    "stremio-addon-sdk": "^1.6.5"
+    "request-ip": "^2.1.3"
   }
 }

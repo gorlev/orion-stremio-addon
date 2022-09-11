@@ -1,12 +1,12 @@
 const express = require("express");
 const addon = express();
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: `${__dirname}/.env`});
 const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
 const getPublicIP = require("./lib/getPublicIP");
 const debridLinkResolver = require("./lib/debridLinkResolver");
-const config = require("./config");
+const config = require("./config.js");
 const kitsuHandler = require("./lib/kitsuHandler");
 const MANIFEST = require("./lib/manifest")
 
@@ -18,9 +18,9 @@ var respond = function (res, data) {
   res.send(data);
 };
 
-const CACHE_MAX_AGE = 4 * 60 * 60; // 4 hours in seconds
-const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
-const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
+// const CACHE_MAX_AGE = 4 * 60 * 60; // 4 hours in seconds
+// const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
+// const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
 
 addon.engine('html', require('ejs').renderFile);
 // addon.set('view engine', 'html');
@@ -69,9 +69,9 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
     clientIp = await getPublicIP();
   } //Only for local testing.
 
-  if (req.params.id.includes("kitsu")) {
+  if (id.includes("kitsu")) {
 
-    let kitsuID = req.params.id.split(":")[1]
+    let kitsuID = id.split(":")[1]
     let responseKitsuHandler = await kitsuHandler(kitsuID)
 
     if(responseKitsuHandler !== undefined){
@@ -81,7 +81,8 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   }
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
-  respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
+  respond(res, {streams: stream});
+  // respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
 });
 
 addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
@@ -112,6 +113,10 @@ addon.get('/serverip', async function (req, res) {
   const publicIP = await getPublicIP();
   res.send(publicIP);
   res.end()
+});
+
+addon.get('*', function(req, res){
+  res.redirect("/")
 });
 
 if (module.parent) {
