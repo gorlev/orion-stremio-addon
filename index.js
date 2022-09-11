@@ -27,12 +27,14 @@ addon.engine('html', require('ejs').renderFile);
 addon.set('views', __dirname);
 
 
-addon.get("/", async function (req, res) {
+addon.get("/", function (req, res) {
   res.redirect("/configure")
 });
 
 addon.get("/:userConf?/configure", function (req, res) {
-  res.render('configure.html',{MANIFEST});
+  const newManifest = { ...{MANIFEST} };
+  res.render('configure.html',newManifest);
+  // res.render('configure.html',{MANIFEST});
 });
 
 addon.get('/manifest.json', function (req, res) {
@@ -57,11 +59,10 @@ addon.get('/:userConf/manifest.json', function (req, res) {
 
 addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
-  let userConf = req.params.userConf
-  let videoId =  req.params.id.split(":")[0]
-  let type = req.params.type
-  let season = req.params.id.split(":")[1]
-  let episode = req.params.id.split(":")[2]
+  let {userConf,type,id} = req.params
+  let videoId = id.split(":")[0]
+  let season = id.split(":")[1]
+  let episode = id.split(":")[2]
   let clientIp = requestIp.getClientIp(req);
 
   if (clientIp.includes("::ffff:")) {
@@ -84,12 +85,7 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 });
 
 addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
-
-  let keyuser = req.params.keyuser
-  let service = req.params.service
-  let iditem = req.params.iditem
-  let idstream = req.params.idstream
-  let episodenumber = req.params.episodenumber
+  let {keyuser,service,iditem,idstream,episodenumber} = req.params
 
   let clientIp = requestIp.getClientIp(req);
 

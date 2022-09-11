@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "videos":"videos"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
