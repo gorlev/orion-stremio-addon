@@ -22,6 +22,8 @@ var respond = function (res, data) {
 // const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
 // const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
 
+
+
 addon.engine('html', require('ejs').renderFile);
 // addon.set('view engine', 'html');
 addon.set('views', __dirname);
