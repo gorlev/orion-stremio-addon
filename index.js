@@ -9,7 +9,8 @@ const debridLinkResolver = require("./lib/debridLinkResolver");
 const config = require("./config.js");
 const kitsuHandler = require("./lib/kitsuHandler");
 const MANIFEST = require("./lib/manifest")
-
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,11 +19,9 @@ var respond = function (res, data) {
   res.send(data);
 };
 
-// const CACHE_MAX_AGE = 4 * 60 * 60; // 4 hours in seconds
-// const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
-// const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
-
-
+const CACHE_MAX_AGE = 4 * 60 * 60; // 4 hours in seconds
+const STALE_REVALIDATE_AGE = 4 * 60 * 60; // 4 hours
+const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
 
 addon.engine('html', require('ejs').renderFile);
 // addon.set('view engine', 'html');
@@ -83,8 +82,7 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   }
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
-  respond(res, {streams: stream});
-  // respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
+  respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
 });
 
 addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
