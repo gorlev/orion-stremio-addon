@@ -10,6 +10,7 @@ const config = require("./config.js");
 const kitsuHandler = require("./lib/kitsuHandler");
 const MANIFEST = require("./lib/manifest")
 const NodeCache = require( "node-cache" );
+const { catalogHandler, searchCatalogHandler } = require("./lib/catalogHandler");
 const myCache = new NodeCache();
 
 var respond = function (res, data) {
@@ -83,6 +84,46 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
   respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
+});
+
+addon.get('/:userConf/catalog/:type/:id/:extra?.json', async function (req, res) {
+  let {userConf,type,id,extra} = req.params
+  let extraObj, userConfiguration
+
+  try {
+    userConfiguration = JSON.parse(Buffer.from(userConf, 'base64').toString())
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+
+  if(extra){
+    try {
+      extraObj =  JSON.parse('{"' + decodeURI(extra.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}')
+    } catch (error) {
+      console.log(error)
+      return []
+    }
+  }
+  
+  if(extraObj && extraObj.genre && extraObj.genre.includes("+")){
+    extraObj.genre = extraObj.genre.replace(/\+/g,' ')
+  }
+
+  let pagination
+  if(extraObj && extraObj.skip){
+    pagination =  extra.skip || 1
+    pagination = Math.round((Number(extraObj.skip) / 16) + 1 )
+  }
+
+  let metas = []
+  metas = await catalogHandler(extraObj.genre,userConfiguration.api,pagination,type)
+    
+  if(extraObj && extraObj.search){
+    metas = await searchCatalogHandler(extraObj.search,userConfiguration.api,pagination,type)
+  }
+
+  respond(res, {metas: metas, cacheMaxAge: metas.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE})
 });
 
 addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
