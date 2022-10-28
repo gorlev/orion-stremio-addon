@@ -16,7 +16,7 @@ Unfortunately, local usage is not possible because you will need the app API key
 Features I would like to implement and stuff needed to be done:
 - [x] Documentation
 - [x] Configuration page
-- [ ] More configuration options that Orion already supports
+- [x] More configuration options that Orion already supports
 - [x] Debrid support with Orion's natively supported Debrid services (Real-Debrid, Premiumize.me, Offcloud)
 
 ## Contributions
