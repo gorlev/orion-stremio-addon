@@ -355,6 +355,7 @@ button:active {
                <option value="debridlink">DebridLink</option>
             </select>
             <p> ❗❗ Tick if you only have a Premium Debrid Account ❗❗<br>
+            <p>Watching a video using the Debrid provider will deduct your Daily Container Limit❗<br>
          </div>
 
          <label class="label" id="addParamsLabel" for="addParams">Additional Parameters: (Optional)</label>
@@ -390,54 +391,55 @@ button:active {
 
 
       </div>
+
       <script type="text/javascript">
-          $(document).ready(function() {
-              $('#checkboxesVideo').multiselect({
-                  nonSelectedText: 'All Videos',
-                  onChange: () => generateInstallLink()
-              });
-              $('#checkboxesVideo').multiselect('select', []);
+         $(document).ready(function() {
+            $('#checkboxesVideo').multiselect({
+               nonSelectedText: 'All Videos',
+               onChange: () => generateInstallLink()
+            });
+            $('#checkboxesVideo').multiselect('select', []);
 
-              $('#checkboxesAudio').multiselect({
-                  nonSelectedText: 'All Audios',
-                  onChange: () => generateInstallLink()
-              });
-              $('#checkboxesAudio').multiselect('select', []);
+            $('#checkboxesAudio').multiselect({
+               nonSelectedText: 'All Audios',
+               onChange: () => generateInstallLink()
+            });
+            $('#checkboxesAudio').multiselect('select', []);
 
-              $('#authDebridOptions').multiselect({
-                  nonSelectedText: 'None',
-                  onChange: () => generateInstallLink()
-              });
-              $('#authDebridOptions').multiselect('select', []);
-              $('#listingOption').val("torrent");
-
-
-              $('#authAudioOptions').multiselect({
-                  nonSelectedText: 'None',
-                  onChange: () => generateInstallLink()
-              });
-              $('#authAudioOptions').multiselect('select', []);
-              $('#audioLangOption').val("no");
+            $('#authDebridOptions').multiselect({
+               nonSelectedText: 'None',
+               onChange: () => generateInstallLink()
+            });
+            $('#authDebridOptions').multiselect('select', []);
+            $('#listingOption').val("torrent");
 
 
-              $('#orionApi').val("");
-              $('#addParams').val("");
-              generateInstallLink();
-              changingListing();
-              changingAudioLang();
-          });
+            $('#authAudioOptions').multiselect({
+               nonSelectedText: 'None',
+               onChange: () => generateInstallLink()
+            });
+            $('#authAudioOptions').multiselect('select', []);
+            $('#audioLangOption').val("no");
 
-          function changingListing() {
+
+            $('#orionApi').val("");
+            $('#addParams').val("");
+            generateInstallLink();
+            changingListing();
+            changingAudioLang();
+         });
+
+         function changingListing() {
             const provider = $('#listingOption').val()
             $('#aDebridOptions').toggle(provider !== 'torrent');
-          }
+         }
 
          function changingAudioLang() {
             const provider = $('#audioLangOption').val()
             $('#AudioOptions').toggle(provider !== 'no');
          }
 
-          function encode(userData) {
+         function encode(userData) {
             return btoa(JSON.stringify(userData)).replace(/\+/g, '-').replace(/\//g, '_').split('=')[0]
          }
 
@@ -446,39 +448,39 @@ button:active {
             document.execCommand("copy");
          }
 
-          function generateInstallLink() {
+         function generateInstallLink() {
 
-               const sortValue = $('#sort-value').val()
-               const apikey = $('#orionApi').val()
-               const linkLimit = $('#linkLimit').val()
-               const videoquality = $('#checkboxesVideo').val()
-               const audioquality = $('#checkboxesAudio').val()
-               const listOpt = $('#listingOption').val()
-               const debridservices = $('#authDebridOptions').val()
+            const sortValue = $('#sort-value').val()
+            const apikey = $('#orionApi').val()
+            const linkLimit = $('#linkLimit').val()
+            const videoquality = $('#checkboxesVideo').val()
+            const audioquality = $('#checkboxesAudio').val()
+            const listOpt = $('#listingOption').val()
+            const debridservices = $('#authDebridOptions').val()
 
-               const audiolanguages = $('#authAudioOptions').val()
-               const additionalParameters = $('#addParams').val()
+            const audiolanguages = $('#authAudioOptions').val()
+            const additionalParameters = $('#addParams').val()
 
-               let configurationValue = {
-                  api: apikey,
-                  linkLimit: linkLimit,
-                  sortValue: sortValue,
-                  audiochannels: audioquality.toString(),
-                  videoquality: videoquality.toString(),
-                  listOpt: listOpt,
-                  debridservices: debridservices,
-                  audiolanguages: audiolanguages,
-                  additionalParameters
-               }
-               // console.log(configurationValue)
-               const configuration = encode(configurationValue)
+            let configurationValue = {
+               api: apikey,
+               linkLimit: linkLimit,
+               sortValue: sortValue,
+               audiochannels: audioquality.toString(),
+               videoquality: videoquality.toString(),
+               listOpt: listOpt,
+               debridservices: debridservices,
+               audiolanguages: audiolanguages,
+               additionalParameters
+            }
+            // console.log(configurationValue)
+            const configuration = encode(configurationValue)
 
-               document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
+            document.getElementById("installURL").value = window.location.protocol+"//"+window.location.host+"/"+ configuration+ "/manifest.json";
                
-               if (apikey != '') {
-                  installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
-               }
-          }
+            if (apikey != '') {
+               installLink.href = 'stremio://' + window.location.host + '/'  + configuration + '/manifest.json';
+            }
+         }
       </script>
 	</body>
 

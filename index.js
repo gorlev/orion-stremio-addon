@@ -1,6 +1,4 @@
 const express = require("express");
-const addon = express();
-const path = require('path');
 require('dotenv').config({ path: `${__dirname}/.env`});
 const dataHandler = require('./lib/dataHandler');
 const requestIp = require('request-ip');
@@ -9,9 +7,11 @@ const debridLinkResolver = require("./lib/debridLinkResolver");
 const config = require("./config.js");
 const kitsuHandler = require("./lib/kitsuHandler");
 const MANIFEST = require("./lib/manifest")
-const NodeCache = require( "node-cache" );
 const { catalogHandler, searchCatalogHandler } = require("./lib/catalogHandler");
-const myCache = new NodeCache();
+
+const { v5: uuidv5 } = require('uuid');
+const addon = express();
+addon.set('trust proxy', Number(process.env.TRUST_PROXY_NUMBER) || 1)
 
 var respond = function (res, data) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,7 +27,6 @@ const STALE_ERROR_AGE = 7 * 24 * 60 * 60; // 7 days
 addon.engine('html', require('ejs').renderFile);
 // addon.set('view engine', 'html');
 addon.set('views', __dirname);
-
 
 addon.get("/", function (req, res) {
   res.redirect("/configure")
@@ -57,10 +56,7 @@ addon.get('/:userConf/manifest.json', function (req, res) {
   }
 });
 
-// const nrOfDays = (nr) => nr * (24 * 3600);
-
 addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
-
   let {userConf,type,id} = req.params
   let videoId = id.split(":")[0]
   let season = id.split(":")[1]
@@ -82,9 +78,25 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
     }
   }
 
-  const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
-  respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
+  // const userAPI = JSON.parse(Buffer.from(userConf, 'base64').toString()).api
+  
+  // let headers = req.headers
+  // delete headers["if-none-match"]
+
+  // const client = {   
+  //   apiKey: userAPI,
+  //   headers: req.headers,
+  //   userIP: clientIp
+  // }
+
+  // const MY_NAMESPACE = process.env.MY_NAMESPACE || ""
+  // // console.log(uuidv5(JSON.stringify(client), MY_NAMESPACE));
+
+  const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp, encodeURIComponent(req.headers["user-agent"]))
+  return respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
+
 });
+
 
 addon.get('/:userConf/catalog/:type/:id/:extra?.json', async function (req, res) {
   let {userConf,type,id,extra} = req.params
@@ -126,17 +138,15 @@ addon.get('/:userConf/catalog/:type/:id/:extra?.json', async function (req, res)
   respond(res, {metas: metas, cacheMaxAge: metas.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE})
 });
 
-addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber', async function (req, res) {
+addon.get('/download/:keyuser/:service/:iditem/:idstream/:episodenumber?',async function (req, res) {
   let {keyuser,service,iditem,idstream,episodenumber} = req.params
-
   let clientIp = requestIp.getClientIp(req);
 
   if (clientIp.includes("::ffff:")) {
     clientIp = await getPublicIP();
   } //Only for local testing.
 
-  debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp,episodenumber)
-
+  let debridLink = await debridLinkResolver(keyuser,service,iditem,idstream,clientIp,episodenumber)
   if(debridLink === "error" || "" || undefined){
     const video = `${__dirname}/videos/error.mp4`;
     res.download(video);
