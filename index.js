@@ -78,19 +78,19 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
     }
   }
 
-  // const userAPI = JSON.parse(Buffer.from(userConf, 'base64').toString()).api
+  const userAPI = JSON.parse(Buffer.from(userConf, 'base64').toString()).api
   
-  // let headers = req.headers
-  // delete headers["if-none-match"]
+  let headers = req.headers
+  delete headers["if-none-match"]
 
-  // const client = {   
-  //   apiKey: userAPI,
-  //   headers: req.headers,
-  //   userIP: clientIp
-  // }
+  const client = {   
+    apiKey: userAPI,
+    headers: req.headers,
+    userIP: clientIp
+  }
 
-  // const MY_NAMESPACE = process.env.MY_NAMESPACE || ""
-  // // console.log(uuidv5(JSON.stringify(client), MY_NAMESPACE));
+  const MY_NAMESPACE = process.env.MY_NAMESPACE || ""
+  console.log(uuidv5(JSON.stringify(client), MY_NAMESPACE));
 
   const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp, encodeURIComponent(req.headers["user-agent"]))
   return respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
