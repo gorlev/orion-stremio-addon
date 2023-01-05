@@ -80,8 +80,7 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
 
   // const userAPI = JSON.parse(Buffer.from(userConf, 'base64').toString()).api
   
-  // let headers = req.headers
-  // delete headers["if-none-match"]
+  let userAgent = req.headers['user-agent'] || ""
 
   // const client = {   
   //   apiKey: userAPI,
@@ -89,7 +88,7 @@ addon.get('/:userConf/stream/:type/:id.json', async function (req, res) {
   //   userIP: clientIp
   // }
 
-  const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp)
+  const stream = await dataHandler(userConf, videoId, type, season, episode, clientIp, userAgent)
   return respond(res, { streams: stream, cacheMaxAge: stream.length > 0 ? CACHE_MAX_AGE : 5 * 60 , staleRevalidate: STALE_REVALIDATE_AGE, staleError: STALE_ERROR_AGE });
 
 });
